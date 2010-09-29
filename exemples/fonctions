@@ -1,0 +1,33 @@
+; LA SUMM de X A 0
+
+( de summ (x) ( if ( <= x 0) 0 ( add x ( summ (1- x)))))
+; LA FACTORIELLE
+( de fact (x)
+  ( if
+    ( <= x 0 ) 1
+    ( mul x ( fact ( 1- x)))
+  )
+)
+
+  ; FIBONNACCI
+;( de fibo(i) ( cond                          ; MAUVAISE IMPLEMENTATION
+;     ( (or (<= i 1) (= i 2)) 1)
+;     ( t  (add (fibo (1- i)) ( fibo (- i 2))))
+;)
+;)
+
+; Exemple d'utilisation de variables locales
+( de fibo(i)
+   ( de sous_fibo(a b tmp)
+     ( set 'a (set 'b 1)) ;initialisation des parametres
+     ( repeat (- i 2)
+        ( set 'tmp (+ a b))  ; calcul et decalage des termes
+        ( set 'a b)
+        ( set 'b tmp)
+      )
+      tmp ; le renvoi
+   )
+  ( if (<= i 2) 1 (sous_fibo nil nil nil))
+)
+
+

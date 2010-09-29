@@ -1,0 +1,196 @@
+;----------------------------------
+; probleme des lions et des chiens
+;----------------------------------
+; il faut faire traverser des lions et des chiens d'une rive a une autre
+; grace a un bateau qui ne peut contenir au plus que deux animaux.
+; On ne peut laisser ensemble plus de lions que de chiens pour 
+; eviter que les premiers ne devorent les seconds.
+; Comment faire passer tous les animaux??
+
+;-----------------------------------------------------------
+; le probleme se traite par exploration combinatoire de tous
+; les mouvements possibles
+
+; definition du moteur d'exploration combinatoire
+;-----------------------------------------------------------
+(de explorer ()
+  (set 'succes nil) (set 'dejavus nil) (set 'reponse ())
+  (explorertout (initialiser) 1)
+  (imprimer (cons (list 0 init) reponse))
+  (if succes 'succes 'echec)
+)
+(de explorertout (etats n)
+  (cond ((or (null etats) succes) nil)
+        (t (exploreretat (car etats) n)
+           (explorertout (cdr etats) n) ) )
+)
+
+(de exploreretat (etat n)
+  (if (null (dejavu etat))
+      (progn (vu etat)
+           ;(print n etat)
+           (cond ((gagne etat) (set 'succes etat))
+                 ((perdu etat) ())
+                 (t (explorertout (generer etat) (add 1 n))))))
+  (if succes (set 'reponse (cons (list n etat) reponse)))
+)
+
+;------------------------
+; definition du probleme
+;------------------------
+
+;Un etat est forme d'un couple : 
+;   (etat de la rive gauche, etat de la rive droite)
+
+
+; les rives
+
+(de rivegauche (etat) (car etat))
+
+(de rivedroite (etat) (car (cdr etat)))
+
+; le cas d'echec
+
+(de perdu (etat)
+    (or (and (> (nombre 'lion (rivegauche etat))
+                (nombre 'chien (rivegauche etat)))
+             (> (nombre 'chien (rivegauche etat)) 0))
+        (and (> (nombre 'lion (rivedroite etat))
+                (nombre 'chien (rivedroite etat)))
+             (> (nombre 'chien (rivedroite etat)) 0)) )
+)
+
+; le bon cas
+
+(de gagne (etat) (null (rivegauche etat)))
+
+; l'initialisation
+
+(de initialiser ()
+   (vu init)
+   (generer init)
+)
+;----------------------------------------------------------
+;Pour comparer les etats, un etat est forme d'un triplet:
+;   (nombre de lions sur la rive gauche,
+;    nombre de chiens sur la rive gauche,
+;    nombre de bateau sur la rive gauche (0/1))
+
+; dejavus est la liste des etats deja explores
+;----------------------------------------------------------
+(de vu (etat)
+   (set 'nbs (list (nombre 'chien  (rivegauche etat))
+                   (nombre 'lion   (rivegauche etat))
+                   (nombre 'bateau (rivegauche etat))))
+   (if (nullp (member nbs dejavus)) (set 'dejavus (cons nbs dejavus)))
+)
+
+(de dejavu (etat)
+   (member (list (nombre 'chien  (rivegauche etat))
+                 (nombre 'lion   (rivegauche etat))
+                 (nombre 'bateau (rivegauche etat)))
+           dejavus)
+)
+;------------------------------------------------------
+; generation de tous les etats a partir d'un etat donne
+;------------------------------------------------------
+
+(de generer (etat)
+   (if (member 'bateau (rivegauche etat))
+            (generertransfertsadroite transfertspossibles etat)
+            (generertransfertsagauche transfertspossibles etat))
+)
+
+(de generertransfertsadroite (translist etat)
+    (cond
+       ((null translist) nil)
+       ((presents (car translist) (rivegauche etat))
+          (cons (transfertadroite (car translist) etat)
+                (generertransfertsadroite (cdr translist) etat)))
+       (t (generertransfertsadroite (cdr translist) etat)))
+)
+
+
+(de generertransfertsagauche (translist etat)
+    (cond
+       ((null translist) nil)
+       ((presents (car translist) (rivedroite etat))
+          (cons (transfertagauche (car translist) etat)
+                (generertransfertsagauche (cdr translist) etat)))
+       (t (generertransfertsagauche (cdr translist) etat)))
+)
+
+(de presents (trans rive)
+    ; test si les elements a transferer sont bien sur la rive
+    (and (<= (nombre 'lion trans) (nombre 'lion rive))
+         (<= (nombre 'chien trans) (nombre 'chien rive)))
+)
+
+(de transfertadroite (trans etat)
+    (list (supprime trans (rivegauche etat))
+          (ajoute trans (rivedroite etat)))
+)
+
+(de transfertagauche (trans etat)
+    (list (ajoute trans (rivegauche etat))
+          (supprime trans (rivedroite etat)))
+)
+
+;-----------
+;utilitaires
+;-----------
+
+(de ajoute (trans rive)
+    (append trans rive)
+)
+
+(de supprime (trans rive)
+    (set ' l1 rive) (set 'l2 trans)
+    (while l2 (set 'l1 (supp (car l2) l1)) (set 'l2 (cdr l2)))
+    l1
+)
+
+(de supp (x l)
+    (cond ((null l) ())
+          ((equal (car l) x) (cdr l))
+          (t (cons (car l) (supp x (cdr l)))))
+)
+
+(de nombre (x liste)
+    (cond ((nullp liste) 0)
+          ((equal x (car liste)) (add 1 (nombre x (cdr liste))))
+          ( t (nombre x (cdr liste))))
+)
+
+;(de append (l1 l2)
+;    (cond ((null l1) l2)
+;          ( t (append (cdr l1) (cons (car l1) l2))))
+;)
+
+(de member (x l)
+   (cond ((nullp l) ())
+          ((equal x (car l)) t)
+          (t (member x (cdr l))))
+)
+
+(de imprimer (rep)
+    (cond ((null rep) nil)
+          (t (print (car(car rep)) (car(cdr(car rep))))
+             (imprimer (cdr rep))))
+)
+;----------------------------------------------------------------------
+; l'etat initial et les transferts possibles
+;----------------------------------------------------------------------
+
+
+(set 'init '((lion lion lion chien chien chien bateau) ()))
+
+
+(set 'transfertspossibles 
+     '(( chien bateau)
+       ( lion bateau)
+       ( chien chien bateau)
+       ( lion lion bateau)
+       ( lion chien bateau)
+      )
+)

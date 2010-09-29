@@ -1,0 +1,50 @@
+;
+; differentes manieres d'imprimer un arbre
+;
+
+(de preordre (a n)
+    (if a (progn
+              (repeat n (prin " "))(print (car a))
+              (preordre (car (cdr a))(add 3 n))
+              (preordre (car (cdr (cdr a)))(add 3 n))))
+)
+
+(de postordre (a n)
+    (if a (progn
+              (postordre (car (cdr a))(add 3 n))
+              (postordre (car (cdr (cdr a)))(add 3 n))
+              (repeat n (prin " "))(print (car a))))
+)
+
+(de inordre (a n)
+    (if a (progn
+              (inordre (car (cdr a))(add 3 n))
+              (repeat n (prin " "))(print (car a))
+              (inordre (car (cdr (cdr a)))(add 3 n))))
+)
+
+
+; un arbre
+(set 'arbre '(chose
+                (etrevivant
+                   (plante
+                      (arbre
+                         (pin)
+                         (chene))
+                      (fleur
+                         (rose)))
+                   (animal
+                      (insecte)
+                      (reptile)
+                      (mammifere
+                         (chien)
+                         (singe)
+                         (etrehumain))))
+                   (inanime
+                      (naturel
+                         (nuage)
+                         (roche))
+                      (artificiel
+                         (voiture)
+                         (ordinateur)))))
+

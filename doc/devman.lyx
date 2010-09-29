@@ -1,0 +1,1811 @@
+#This file was created by <jerome> Wed Jan 24 17:27:25 2001
+#LyX 0.12 (C) 1995-1998 Matthias Ettrich and the LyX Team
+\lyxformat 2.15
+\textclass book
+\language french
+\inputencoding latin1
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize a4paper
+\paperpackage a4
+\use_geometry 1
+\use_amsmath 0
+\paperorientation portrait
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+LISPInterpréteur V1.0
+\newline 
+Manuel du dévellopeur
+\layout Author
+
+Jérôme Etévé & Arnaud Céol,
+\newline 
+Maîtrise d'informatique USTL 2000/2001
+\layout Standard
+
+
+\begin_inset LatexCommand \tableofcontents
+
+\end_inset 
+
+
+\layout Part
+
+Introduction
+\layout Chapter
+
+Préliminaires
+\layout Section
+
+Contacts
+\layout Standard
+
+Ce manuel à été écrit par Jérôme Etévé et Arnaud Céol, étudiant en maîtrise
+ d'informatique de L'Université des Sciences et Technologies de Lille.
+ Vous pouvez trouver leurs coordonnés à l'URL suivante :
+\layout Address
+
+http://www.chez.com/lispi/
+\layout Section
+
+A qui s'adresse ce document ?
+\layout Standard
+
+Ce document s'adresse aux dévellopeurs qui s'intérressent à la maintenance
+ et à l'évolution du produit LISPI.
+ Vous y trouverez assez d'information sur les sources de LISPI pour pouvoir
+ l'améliorer et y ajouter facilement des fonctionnalités supplémentaires.
+\layout Standard
+
+Ce manuel NE REMPLACE PAS la lecture des sources, mais permet de vous guider
+ pour que vous puissiez choisir de ne lire que ce qui vous intéresse.
+\layout Section
+
+Les sources
+\layout Standard
+
+Toutes les sources se trouvent dans le répertoire 
+\begin_inset Quotes eld
+\end_inset 
+
+./sources
+\begin_inset Quotes erd
+\end_inset 
+
+ .
+ Lorsqu'un nom de fichier source est donné dans ce document, c'est relativement
+ à ce répertoire.
+ Par exemple, le fichier 
+\begin_inset Quotes eld
+\end_inset 
+
+toto/toto.c
+\begin_inset Quotes erd
+\end_inset 
+
+ se trouve dans 
+\begin_inset Quotes eld
+\end_inset 
+
+./sources/toto/
+\begin_inset Quotes erd
+\end_inset 
+
+ .
+\layout Chapter
+
+Architecture de LISPI
+\begin_inset LatexCommand \index{architecture}
+
+\end_inset 
+
+
+\layout Section
+
+Boucle principale
+\begin_inset LatexCommand \label{sec: boucleppale}
+
+\end_inset 
+
+
+\layout Standard
+
+Lispi est construit comme une boucle sur les pseudo-instructions suivantes
+ :
+\layout Enumerate
+
+Lire une phrase sur l'entrée courante,
+\layout Enumerate
+
+Évaluer cette phrase , ce qui donne un résultat, et éventuellement une erreur.
+\layout Enumerate
+
+Imprimer le résultat, ainsi que la pile des appels si une erreur est survenue.
+\layout Standard
+
+Cette boucle se termine :
+\layout Itemize
+
+Lorsque la fin de fichier est atteinte, ou à cause d'un signal du système
+ ou de l'utilisateur.
+ C'est le cas de la boucle 
+\begin_inset Quotes eld
+\end_inset 
+
+main
+\begin_inset Quotes erd
+\end_inset 
+
+ 
+\begin_inset LatexCommand \index{main}
+
+\end_inset 
+
+du programme ( main/essai_e.c ).
+\layout Itemize
+
+Pour les mêmes raisons, 
+\begin_inset LatexCommand \index{esload}
+
+\end_inset 
+
+et aussi en cas d'erreur d'évaluation dans le cas de la fonction utilisateur
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+es_load
+\begin_inset Quotes erd
+\end_inset 
+
+ (es/es.c ).
+\layout Standard
+
+Pour les détails techniques, lisez les sources sus-citées.
+\layout Section
+
+Architecture logique
+\layout Standard
+
+Toutes les fonctions de LISPI travaillent dans la mémoire de doublet
+\begin_inset LatexCommand \index{doublet}
+
+\end_inset 
+
+ et dans la mémoire de symboles
+\begin_inset LatexCommand \index{symboles}
+
+\end_inset 
+
+ ( réferrez vous aux fichiers doublet/doublet.h et symboles/symboles.h pour
+ les détails ).
+ Il se peut que vous ayez besoin d'une pile 
+\begin_inset LatexCommand \index{pile}
+
+\end_inset 
+
+dans le codage d'une fonctionnalité, utilisez pile/pile.h.
+\layout Description
+
+IMPORTANT
+\protected_separator 
+: Bien que les tableaux constituant les mémoires de doublets de symboles
+ soient déclarés 
+\begin_inset Quotes eld
+\end_inset 
+
+extern
+\begin_inset Quotes erd
+\end_inset 
+
+ dans les .h, n'UTILISEZ IMPÉRATIVEMENT que les fonctions et macros proposées.
+\layout Section
+
+Architecture des sources
+\begin_inset LatexCommand \label{sec: archi sources}
+
+\end_inset 
+
+
+\layout Standard
+
+Les sources de LISPI sont placées dans le répertoire ./sources/ .
+ Ce répertoire est organisé lui même en sous-répertoires.
+ Un fichier source qui ne serait pas dans un sous-répertoire de sources/
+ ne serait pas pris en compte par le processus de compilation.
+ Chacun de ces sous-répertoires correspond à un ou plus module .o .
+ Dans chaque sous-répertoire, vous trouverez pour chaque .c , un .h correspondant.
+ En effet, le processus de compilation de LISPI considère qu'il faut générer
+ un .o pour chaque .c .
+\layout Description
+
+Exemple
+\protected_separator 
+: Dans le sous-répertoire eval/, vous trouvez eval.c et eval.h qui donnent
+ eval.o, et flamnda.c et flambda.h qui donnent flambda.o
+\layout Section
+
+Compilation
+\begin_inset LatexCommand \index{compilation}
+
+\end_inset 
+
+
+\layout Standard
+
+Si vous respectez l'organisation des sources comme expliqué plus haut, vous
+ n'avez pas à écrire de Makefile.
+ Il vous suffit de lancer, à la racine du programme un des scripts remake
+ ou remake.solaris .
+ Ces scripts copient les sources dans un répertoire ./allsrc/, et génèrent
+ automatiquement un Makefile adéquat, en prenant en compte les dépendances
+ entre modules.
+ A la fin du processus, votre nouveau programme LISPI se trouve dans le
+ répertoire ./bin/ .
+\layout Standard
+
+Vous pouvez changer les options de compilation en modifiant les variables
+ adéquates ( CFLAGS etc...) qui se trouvent en tête de ces scripts.
+\layout Chapter
+
+Ajout d'un module
+\begin_inset LatexCommand \index{ajout d'un module}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \label{sec: ajout module}
+
+\end_inset 
+
+
+\layout Standard
+
+Pour ajouter un module, par exemple toto.o, au programme, créez un fichier
+ toto.c et un fichier toto.h dans un sous-répertoire de sources/ .
+ Vous pouvez définir un nouveaux sous-répertoire.
+ Par exemple, pour toto.o, on peut créer ./sources/toto/, puis y placer toto.c
+ et toto.h.
+ Pour l'utilisation de ce module dans un autre fichier sources, vous y placerez
+ simplement une commande #include <toto.h> .
+\layout Chapter
+
+Quelques conventions de codage
+\begin_inset LatexCommand \index{conventions}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \label{sec: conventions}
+
+\end_inset 
+
+
+\layout Section
+
+La macro _NO_DEBUG
+\layout Standard
+
+En phase de développement, nous vous conseillons de mettre entre #ifndef
+ _NO_DEBUG et #endif , le code qui vous servira à débuger
+\begin_inset LatexCommand \index{debug}
+
+\end_inset 
+
+ votre nouveaux LISPI.
+ Il vous suffira ensuite de passer l'option -D_NO_DEBUG à la compilation
+ pour obtenir un programme exempt du code superflu de debugage.
+\layout Section
+
+Les noms de fonctions et de macros
+\layout Standard
+
+Pour vous y retrouver dans les sources de LISPI, nous vous conseillons de
+ préfixer les noms que vous donnez aux fonctions et aux macros par le nom
+ du module auxquel elle appartiennent.
+ Par exemple, la fonction qui donne le 
+\begin_inset Quotes eld
+\end_inset 
+
+car
+\begin_inset Quotes erd
+\end_inset 
+
+ d'un doublet se nomme 
+\begin_inset Quotes eld
+\end_inset 
+
+doublet_car
+\begin_inset Quotes erd
+\end_inset 
+
+
+\begin_inset LatexCommand \index{doublet car}
+
+\end_inset 
+
+, car elle se trouve dans le module doublet.o
+\begin_inset LatexCommand \index{doublet}
+
+\end_inset 
+
+ et donc les fichiers doublet.h et doublet.c .
+\layout Section
+
+Fonctions ou macros ?
+\layout Standard
+
+Il est évident qu'au niveau exécution, l'utilisation d'une macro est plus
+ rapide que l'appel d'une fonction.
+ Nous vous conseillons donc, lors de la phase de développement, d'utiliser
+ des fonctions, qui laissent plus de liberté et de facilité pour le debugage.
+ Lorsque vous atteignez la phase de livraison d'un programme, il vous suffit
+ de commenter les codes des fonctions que vous jugez utiles de transformer
+ en macro, et de définir celle-ci avec les même noms que les fonctions.
+\layout Standard
+
+Par exemple, dans le module symboles.o, 
+\begin_inset LatexCommand \index{symboles}
+
+\end_inset 
+
+ vous trouvez la macro 
+\newline 
+
+\begin_inset Quotes eld
+\end_inset 
+
+symboles_fonction_associee
+\begin_inset Quotes erd
+\end_inset 
+
+ qui était, avant la livraison, une fonction, avec tout les contrôles adéquats
+ pour le débugage
+\begin_inset LatexCommand \index{debug}
+
+\end_inset 
+
+.
+ 
+\layout Section
+
+Prototypes des fonctions
+\begin_inset LatexCommand \label{sec: prototype}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{prototype}
+
+\end_inset 
+
+
+\layout Standard
+
+Les fonctions pouvant être appelées par l'utilisateur DOIVENT avoir le prototype
+ suivant ( macro PROTOARGS
+\begin_inset LatexCommand \index{PROTOARGS}
+
+\end_inset 
+
+ dans utiles.h
+\begin_inset LatexCommand \index{utiles}
+
+\end_inset 
+
+ ) :
+\newline 
+
+\family typewriter 
+\series bold 
+\size large 
+int foo(int a, int *b)
+\family default 
+\series default 
+\size default 
+.
+ 
+\layout Standard
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+a
+\begin_inset Quotes erd
+\end_inset 
+
+ est la liste paramètre de foo, *b est le résultat calculé par foo, et foo
+ renvoie son statu d'erreur : SUCCES ou ECHEC.
+ Ces macros sont définies dans utiles.h.
+\layout Standard
+
+Il nous parait raisonnable de garder cette philosophie ,dans la mesure du
+ bon sens , même pour les fonctions strictement internes à LISPI.
+\layout Part
+
+Les modules existant de LISPI
+\layout Standard
+
+
+\begin_inset LatexCommand \index{modules}
+
+\end_inset 
+
+Dans cette partie, nous vous donnons un bref aperçu des modules qui composent
+ le programme LISPI.
+ Cette partie ne remplace pas la lecture des sources mais vous permettra
+ de vite retrouver une fonctionnalité qui vous intéresse.
+\layout Chapter
+
+Les modules de base du programme
+\layout Standard
+
+Ces modules, déjà évoqués sont le coeur de l'interpréteur.
+ Toute modification de ces modules doit être largement commentée et documentée.
+\layout Section
+
+Le module symboles.o
+\begin_inset LatexCommand \index{symboles}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \label{sec: symboles}
+
+\end_inset 
+
+
+\layout Standard
+
+Ce module est destiné à contenir les symboles, qui sont de simples chaînes
+ de caractères.
+ Il permet de manipuler ces symboles sous forme de type abstrait ( en fait
+ un entier ).
+ Il permet aussi d'associer une fonction à un symbole
+\begin_inset LatexCommand \index{fonction associee}
+
+\end_inset 
+
+.
+ 
+\layout Standard
+
+Arrêtons nous sur la fonction qui permet de créer un symbole :
+\layout Standard
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+int symboles_nouveau( char * chaine)
+\begin_inset LatexCommand \index{symboles nouveau}
+
+\end_inset 
+
+
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ La chaine passée en paramètre DOIT être susceptible d'être détruite par
+ un free.
+ Elle DOIT donc être crée à partir d'un malloc.
+ Nous vous conseillons d'utiliser la fonction 
+\begin_inset Quotes eld
+\end_inset 
+
+strdup
+\begin_inset Quotes erd
+\end_inset 
+
+
+\begin_inset LatexCommand \index{strdup}
+
+\end_inset 
+
+ ( #include <string.h> ) pour passer une chaîne valide à cette fonction.
+ En particulier, les littéraux chaîne de caractères écrits en dur dans le
+ programme ne sont pas valides pour cette fonction.
+ Par exemple, pour créer un nouveau symbole 
+\begin_inset Quotes eld
+\end_inset 
+
+toto
+\begin_inset Quotes erd
+\end_inset 
+
+ et récupérer sa référence, on fait :
+\layout Standard
+
+symboles_nouveau(strdup( 
+\begin_inset Quotes eld
+\end_inset 
+
+toto
+\begin_inset Quotes erd
+\end_inset 
+
+ )) et non symboles_nouveau(
+\begin_inset Quotes eld
+\end_inset 
+
+toto
+\begin_inset Quotes erd
+\end_inset 
+
+ ).
+\layout Section
+
+Le module doublet.o
+\begin_inset LatexCommand \index{doublet}
+
+\end_inset 
+
+
+\layout Standard
+
+Ce module contient la mémoire interne de LISPI ainsi que le garbage collector
+\begin_inset LatexCommand \index{garbage collector}
+
+\end_inset 
+
+.
+ Arrêtons nous sur les fonctions d'aide au garbage collecting :
+\layout Description
+
+doublet_garder(int
+\protected_separator 
+r)
+\protected_separator 
+: Permet d'empêcher le garbage collector de récupérer l'arbre de racine
+ r.
+\begin_inset LatexCommand \index{doublet garder}
+
+\end_inset 
+
+
+\layout Description
+
+doublet_restituer(int
+\protected_separator 
+r)
+\protected_separator 
+: Autorise le garbage collector à récupérer l'arbre de racine r.
+\begin_inset LatexCommand \index{doublet restituer}
+
+\end_inset 
+
+
+\layout Description
+
+doublet_lock(int
+\protected_separator 
+r)
+\protected_separator 
+: Empêche toute opération sur l'arbre r ( sauf doublet_unlock ).
+\begin_inset LatexCommand \index{doublet lock}
+
+\end_inset 
+
+
+\layout Description
+
+doublet_unlock(int
+\protected_separator 
+r)
+\protected_separator 
+: Autorise à nouveau toutes les opérations sur l'arbre r.
+\begin_inset LatexCommand \index{doublet unlock}
+
+\end_inset 
+
+
+\layout Standard
+
+Ces deux dernières fonctions sont utiles pour sauvergarder les phrases qui
+ doivent êtres évaluée plusieurs fois dans les fonctions du deuxième type.
+ Par exemple dans fwhile et frepeat.
+\begin_inset LatexCommand \index{fwhile}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{frepeat}
+
+\end_inset 
+
+.
+ ( voir 
+\begin_inset LatexCommand \ref{sec: controle}
+
+\end_inset 
+
+ ).
+\layout Section
+
+Le module env.o
+\begin_inset LatexCommand \index{env}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{environnement}
+
+\end_inset 
+
+
+\layout Standard
+
+Ce module est une couche au dessus de doublet.o qui propose des fonctions
+ permettant de gérer l'environnement de LISPI.
+ Il contient aussi quelques fonctions primitives utilisateur qui travaillent
+ sur l'environnement.
+ Remarquons la présence des fonctions 
+\begin_inset Quotes eld
+\end_inset 
+
+env_push
+\begin_inset Quotes erd
+\end_inset 
+
+ et 
+\begin_inset Quotes eld
+\end_inset 
+
+env_pop
+\begin_inset Quotes erd
+\end_inset 
+
+ qui permettent d'augmenter et de diminuer proprement l'environnement lors
+ de l'appel d'une fonction définie par l'utilisateur ( dans flambda 
+\begin_inset LatexCommand \index{flambda}
+
+\end_inset 
+
+).
+\layout Chapter
+
+Les modules de la boucle principale
+\layout Standard
+
+Ces modules sont utilisés directement par la boucle principale évoquée au
+ chapitre 
+\begin_inset LatexCommand \ref{sec: boucleppale}
+
+\end_inset 
+
+.
+\layout Section
+
+La lecture d'une phrase
+\begin_inset LatexCommand \index{lecture}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{entree}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{lexico}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{syntax}
+
+\end_inset 
+
+
+\layout Description
+
+entree.o
+\protected_separator 
+,
+\protected_separator 
+lexico.o
+\protected_separator 
+,
+\protected_separator 
+syntax.o
+\protected_separator 
+: Ces trois modules forment les trois couches classiques d'une analyse syntaxiqu
+e récursive descendante.
+ Une petite précision : on doit spécifier le fichier à analyser avec 
+\begin_inset Quotes eld
+\end_inset 
+
+entree_set_entree
+\begin_inset Quotes erd
+\end_inset 
+
+
+\begin_inset LatexCommand \index{entree set entree}
+
+\end_inset 
+
+.
+\layout Section
+
+Évaluation
+\begin_inset LatexCommand \index{evaluation}
+
+\end_inset 
+
+
+\layout Standard
+
+Les modules eval.o et flambda.o assurent l'évaluation d'une phrase LISP.
+ En cas d'erreur d'évaluation, faites un appel à 
+\begin_inset Quotes eld
+\end_inset 
+
+eval_print_appels
+\begin_inset Quotes erd
+\end_inset 
+
+ pour sortir la pile des appels.
+\begin_inset LatexCommand \index{eval}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{flambda}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{eval print appel}
+
+\end_inset 
+
+
+\layout Section
+
+Impression du résultat
+\layout Standard
+
+Aucun module spécial n'est dédié à cette tâche.
+ Vous trouverez dans utiles.o
+\begin_inset LatexCommand \index{impression}
+
+\end_inset 
+
+ 
+\begin_inset LatexCommand \index{utiles}
+
+\end_inset 
+
+une fonction d'impression d'une phrase dans un fichier ainsi qu'une fonction
+ d'impression sur l'écran.
+\layout Chapter
+
+Quelques outils
+\layout Section
+
+Une pile
+\begin_inset LatexCommand \index{pile}
+
+\end_inset 
+
+
+\layout Standard
+
+C'est le module pile.o .
+ Il propose un type pile géré comme un tableau à taille adaptative pour
+ allier efficacité et souplesse d'utilisation.
+ L'utilisation est on ne peut plus classique.
+\layout Section
+
+utiles.o 
+\series medium 
+
+\begin_inset LatexCommand \index{utiles}
+
+\end_inset 
+
+
+\layout Standard
+
+Contient des procédures d'initialisation de l'interpréteur, des macros toujours
+ utiles, ainsi que deux fonctions d'impression de phrase.
+ C'est à l'intérieur de ces fonctions d'initialisation que sont définies
+ les correspondances symbole - fonction primitive.
+\layout Chapter
+
+Les fonctions primitives
+\layout Standard
+
+Tout les autres modules de LISPI sont en fait des bibliothèques de fonctions
+ primitives utilisateur.
+ Elles ont toutes le même prototype ( voir 
+\begin_inset LatexCommand \ref{sec: prototype}
+
+\end_inset 
+
+ ).
+\layout Section
+
+fnum.o
+\begin_inset LatexCommand \index{fnum}
+
+\end_inset 
+
+
+\layout Standard
+
+Contient toutes les fonctions numériques.
+\layout Section
+
+flist.o
+\begin_inset LatexCommand \index{flist}
+
+\end_inset 
+
+
+\layout Standard
+
+Contient toutes les fonctions de manipulation de liste.
+ Un conseil pour le garbage collecting 
+\begin_inset LatexCommand \index{garbage collector}
+
+\end_inset 
+
+ : observez le code de 
+\begin_inset Quotes eld
+\end_inset 
+
+flist_cons
+\begin_inset Quotes erd
+\end_inset 
+
+
+\begin_inset LatexCommand \index{flist cons}
+
+\end_inset 
+
+.
+\layout Section
+
+fpred.o
+\begin_inset LatexCommand \index{fpred}
+
+\end_inset 
+
+
+\layout Standard
+
+Contient toute les fonctions de manipulation de prédicats.
+\layout Section
+
+es.o
+\begin_inset LatexCommand \index{es}
+
+\end_inset 
+
+
+\layout Standard
+
+Contient des fonctions utilisateur d'entrées/sorties ainsi que la version
+ utilisateur de la fonction eval.
+\layout Section
+
+fcontrole.o
+\begin_inset LatexCommand \index{fcontrole}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \label{sec: controle}
+
+\end_inset 
+
+
+\layout Standard
+
+Contient toutes les fonctions de contrôle du langage LISP.
+ Ces fonctions sont de type 2
+\begin_inset LatexCommand \index{fonctions du type 2}
+
+\end_inset 
+
+, c'est à dire que leur argument n'est pas évalué récursivement par 
+\begin_inset Quotes eld
+\end_inset 
+
+eval_liste
+\begin_inset Quotes erd
+\end_inset 
+
+
+\begin_inset LatexCommand \index{eval liste}
+
+\end_inset 
+
+ avant leur appel.
+ Elles évaluent elles-même leurs arguments grâce à la fonction 
+\begin_inset Quotes eld
+\end_inset 
+
+eval_phrase
+\begin_inset Quotes erd
+\end_inset 
+
+ du module eval.o .
+\begin_inset LatexCommand \index{eval phrase}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{eval}
+
+\end_inset 
+
+
+\layout Part
+
+Ajout d'une fonction primitive
+\begin_inset LatexCommand \index{ajout de fonction}
+
+\end_inset 
+
+
+\layout Standard
+
+Dans cette partie, nous vous proposons d'apprendre à étendre l'arsenal de
+ fonctions primitives de LISPI.
+\layout Chapter
+
+Écriture d'une fonction primitive
+\layout Section
+
+Emplacement du code
+\layout Standard
+
+Vous pouvez écrire le code de votre nouvelle fonction n'importe ou, du moment
+ que vous respectez les règles suivantes :
+\layout Itemize
+
+Respectez les règles du chapitre 
+\begin_inset LatexCommand \ref{sec: prototype}
+
+\end_inset 
+
+ pour la définition du prototype de votre fonction.
+\layout Itemize
+
+Respectez les règles du chapitre 
+\begin_inset LatexCommand \ref{sec: archi sources}
+
+\end_inset 
+
+ pour placer votre fonction dans les répertoires des sources de LISPI.
+\layout Itemize
+
+Respectez les règles du chapitre 
+\begin_inset LatexCommand \ref{sec: ajout module}
+
+\end_inset 
+
+ si vous voulez définir votre fonction dans un nouveau module.
+\layout Section
+
+Écriture du code
+\layout Standard
+
+Nous vous conseillons de respecter la procédure suivante pour l'écriture
+ de votre fonction :
+\layout Enumerate
+
+Mise du résultat à CODE_NIL 
+\begin_inset LatexCommand \index{CODE NIL}
+
+\end_inset 
+
+( macro définie dans utiles.h 
+\begin_inset LatexCommand \index{utiles}
+
+\end_inset 
+
+ ).
+\layout Enumerate
+
+Contrôle des arguments.
+ Si une erreur survient, renvoyer ECHEC ( macro définie dans utiles.h ) .
+\layout Enumerate
+
+Calcul effectif du résultat.
+ Si une erreur survient, renvoyer ECHEC ( macro définie dans utiles.h ) .
+\layout Enumerate
+
+Affectation de la valeur effective au résultat si aucune erreur n'est apparue.
+\layout Enumerate
+
+renvoyer SUCCES ( macro définie dans utiles.h ).
+\layout Standard
+
+Nous vous conseillons de lire le code de plusieurs fonctions déjà écrites
+ pour vous familiariser avec cette technique.
+\layout Chapter
+
+Association fonction/symbole
+\layout Standard
+
+Maintenant que votre fonction 
+\begin_inset Quotes eld
+\end_inset 
+
+int foo(int l, int *r)
+\begin_inset Quotes erd
+\end_inset 
+
+ est écrite, il vous faut l'associer à un ( ou plusieurs ) symbole(s) pour
+ que l'utilisateur de LISPI puisse l'appeler.
+ 
+\layout Standard
+
+Cette association doit se faire au démarrage de LISPI, et donc dans la fonction
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+init_table_symboles
+\begin_inset Quotes erd
+\end_inset 
+
+
+\begin_inset LatexCommand \index{init table symboles}
+
+\end_inset 
+
+ située dans le module utiles.o 
+\begin_inset LatexCommand \index{utiles}
+
+\end_inset 
+
+.
+ Cette fonction contient des groupes de lignes comme celui-ci :
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ #include <fpred.h>
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ ...
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ 1: le_symbole=symboles_nouveau( strdup ("equal" ));
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ 2: le_doublet=doublet_nouveau_doublet(CODE_SYMBOLE,le_symbole);
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ 3: symboles_set_reference(le_symbole,le_doublet);
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ 4: symboles_associe_fonction(le_symbole,fpred_equal);
+\layout Enumerate
+
+On crée un nouveau symbole qui sera le nom de la fonction telle qu'elle
+ sera connue par l'utilisateur.
+ Remarquez la présence de strdup
+\begin_inset LatexCommand \index{strdup}
+
+\end_inset 
+
+, comme expliqué au chapitre 
+\begin_inset LatexCommand \ref{sec: symboles}
+
+\end_inset 
+
+.
+\layout Enumerate
+
+On crée un doublet qui représentera de manière unique ce symbole dans la
+ table des doublets.
+\layout Enumerate
+
+On relie le symbole au doublet qui le représente.
+\layout Enumerate
+
+Enfin on associe une fonction au symbole par l'intermédiaire d'un pointeur
+ de fonction ( simplement son nom sans parenthèses ).
+\layout Standard
+
+On peut remarquer que grâce à cette technique, une fonction utilisateur
+ écrite en C peut avoir plusieurs noms du point de vue de l'utilisation.
+ En effet, rien n'empèche de créer un symbole de nom différent lié à cette
+ même fonction.
+ C'est d'ailleur le cas dans LISPI.
+ Par exemple, la fonction qui effectue l'addition d'une suite de nombre
+ ( fnum_add ) est connue de l'utilisateur par les symboles 
+\begin_inset Quotes eld
+\end_inset 
+
+add
+\begin_inset Quotes erd
+\end_inset 
+
+ et 
+\begin_inset Quotes eld
+\end_inset 
+
++
+\begin_inset Quotes erd
+\end_inset 
+
+ .
+\layout Standard
+
+Vous pouvez ainsi ajouter des groupe de lignes comme dans l'exemple pour
+ que votre nouvelle fonction soit connue de l'utilisateur.
+\layout Description
+
+TRES
+\protected_separator 
+IMPORTANT
+\protected_separator 
+: Apres avoir écrit un groupe de ligne créant un nouveaux symbole, vous
+ DEVEZ incrémenter A LA MAIN la macro DERNIER_RESERVE
+\begin_inset LatexCommand \index{DERNIER RESERVE}
+
+\end_inset 
+
+ dans le fichier utiles.h
+\begin_inset LatexCommand \index{utiles}
+
+\end_inset 
+
+ .
+\layout Chapter
+
+Fonction du type 1 ou du type 2
+\begin_inset LatexCommand \index{fonction du type 1}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{fonction du type 2}
+
+\end_inset 
+
+
+\layout Standard
+
+Comme vu à la section 
+\begin_inset LatexCommand \ref{sec: controle}
+
+\end_inset 
+
+, certaines fonctions (notamment les fonctions implémentant des structures
+ de contrôle), doivent recevoir des arguments qui ne doivent pas être évalués
+ récursivement par la fonction 
+\begin_inset Quotes eld
+\end_inset 
+
+eval_phrase
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ Nous les appelons les fonctions du type 2.
+\layout Standard
+
+La fonction 
+\begin_inset Quotes eld
+\end_inset 
+
+init_table_symboles
+\begin_inset Quotes erd
+\end_inset 
+
+ contient les 2 lignes de commentaire suivante :
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ // fonctions de type 2 : les arguments ne sont pas evalues
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ // Fin des fonctions de type 2
+\layout Standard
+
+Vous devez placer le groupe de lignes de correspondant à votre fonction
+ entre ces lignes de commentaire.
+\layout Standard
+
+Vous pouvez aussi constater que la première et la dernière fonction de type
+ 2 mettent à jour respectivement les variables 
+\begin_inset Quotes eld
+\end_inset 
+
+ft2
+\begin_inset Quotes erd
+\end_inset 
+
+ et 
+\begin_inset Quotes eld
+\end_inset 
+
+fft2
+\begin_inset Quotes erd
+\end_inset 
+
+ avec les valeurs des doublets correspondant.
+\layout Standard
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+ft2
+\begin_inset Quotes erd
+\end_inset 
+
+ est le numéro du doublet correspondant à la première fonction de type 2
+ et 
+\begin_inset Quotes eld
+\end_inset 
+
+fft2
+\begin_inset Quotes erd
+\end_inset 
+
+ est le numéro de doublet correspondant à la dernière fonction de type 2.
+\layout Standard
+
+PENSEZ à garder la cohérence de ces variables si votre nouvelle fonction
+ devient la première ou la dernière fonction de type 2.
+\layout Chapter
+
+Un exemple complet d'ajout de fonction
+\layout Standard
+
+Pour étayer nos propos, voici un exemple complet d'écriture d'une nouvelle
+ fonction utilisateur.
+\layout Standard
+
+Nous allons écrire une fonction d'addition qui aura le comportement suivant
+ : Additionner tout ces arguments, qui doivent être numérique et renvoyer
+ le résultat.
+\layout Section
+
+Prototype et emplacement du code
+\layout Standard
+
+Conformément aux règles énoncées plus haut, nous donnons à notre fonction
+ le prototype suivant :
+\layout Quote
+
+
+\family typewriter 
+int fnum_add( int l, int *r );
+\newline 
+/* l : liste des arguments évalués récursivement
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+*r : résultat en cas de réussite de l'éxécution, CODE_NIL sinon.
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+Renvoie SUCCES en cas de réussite, ECHEC sinon.
+\newline 
+*/
+\layout Standard
+
+D'après le nom de cette fonction, on peut déduire que nous allons en placer
+ le code dans le module fnum.o.
+ C'est à dire le prototype dans fnum.h et le code dans fnum.c .
+ On aurait très bien pu la placer dans un nouveau module ou dans un autre
+ module existant.
+\layout Section
+
+Écriture du code
+\layout Standard
+
+Le code de cette fonction ne pose pas de difficultés :
+\layout Quote
+
+
+\family typewriter 
+int fnum_add(int l, int *r)
+\layout Quote
+
+
+\family typewriter 
+{
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ int somme=0;
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ int pt=l;
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ int nb;
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ *r=CODE_NIL;
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ while ( pt != CODE_NIL )
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ {
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ nb=doublet_car(pt);
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ if ( doublet_car(nb)!=CODE_NOMBRE )
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+{
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ printf (" !! ERREUR dans add, nombre attendu
+\backslash 
+n");
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ return ECHEC;
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+}
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ somme+=doublet_cdr(nb);
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ pt=doublet_cdr(pt);
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ }
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ *r = doublet_nouveau_doublet(CODE_NOMBRE,somme);
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ return SUCCES;
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\layout Quote
+
+
+\family typewriter 
+}
+\layout Standard
+
+On voit qu'on attribue la valeur CODE_NIL à *r avant tout.
+\layout Standard
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+pt
+\begin_inset Quotes erd
+\end_inset 
+
+ est un pointeur sur l'élément courant de la liste des arguments.
+\layout Standard
+
+On s'arrête en queue de liste.
+\layout Standard
+
+Le traitement des erreurs possible est fait en même temps que le calcul
+ du résultat.
+\layout Standard
+
+En cas de succes, on attribue à *r une nouvelle feuille nombre contenant
+ le résultat, et on renvoie la macro SUCCES.
+\layout Section
+
+Association fonction/symbole
+\layout Standard
+
+On insère dans la fonction 
+\begin_inset Quotes eld
+\end_inset 
+
+init_table_symboles
+\begin_inset Quotes erd
+\end_inset 
+
+ ( de 
+\begin_inset Quotes eld
+\end_inset 
+
+utiles.c
+\begin_inset Quotes erd
+\end_inset 
+
+ ) les groupes de lignes suivants :
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ le_symbole=symboles_nouveau( strdup ("add" ));
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ le_doublet=doublet_nouveau_doublet(CODE_SYMBOLE,le_symbole);
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ symboles_set_reference(le_symbole,le_doublet);
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ symboles_associe_fonction(le_symbole,fnum_add);
+\newline 
+
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ le_symbole=symboles_nouveau( strdup ("+" ));
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ le_doublet=doublet_nouveau_doublet(CODE_SYMBOLE,le_symbole);
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ symboles_set_reference(le_symbole,le_doublet);
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ symboles_associe_fonction(le_symbole,fnum_add);
+\layout Standard
+
+On augmente ensuite de 2 la macro DERNIER_RESERVE dans utiles.h .
+ En effet, on a créé 2 symboles réservés.
+\layout Standard
+
+Cette nouvelle fonction sera connue de l'utilisateur par les symboles 
+\begin_inset Quotes eld
+\end_inset 
+
+add
+\begin_inset Quotes erd
+\end_inset 
+
+ et 
+\begin_inset Quotes eld
+\end_inset 
+
++
+\begin_inset Quotes erd
+\end_inset 
+
+ .
+\layout Standard
+
+Il pourrat donc l'appeler comme suit :
+\layout Quote
+
+
+\family typewriter 
+1>
+\protected_separator 
+ ( add 1 11)
+\layout Quote
+
+
+\family typewriter 
+=12
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\layout Quote
+
+
+\family typewriter 
+2> ( add 'a )
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+!! ERREUR dans add, nombre attendu
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+ dans l'appel de add
+\layout Quote
+
+
+\family typewriter 
+=nil
+\protected_separator 
+
+\layout Standard
+
+On voit que en cas d'erreur, la fonction renvoie bien 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ ( CODE_NIL ) et que l'interpréteur imprime bien la pile des appels ayant
+ mené à cette erreur.
+\layout Standard
+
+
+\begin_inset LatexCommand \printindex
+
+\end_inset 
+
+
+\the_end

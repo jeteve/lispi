@@ -1,0 +1,50 @@
+;RECHERCHE EN PROFONDEUR D'ABORD
+
+;chemin dans un graphe explicite;
+; le graphe est represente par des listes:
+; (un_noeud ses_successeurs)
+
+(set 'graphe 
+ '(  (s a d) (a b d) (b e c) (c) (d a e) (e b f) (f g) (g)  ))
+
+; Exemple:
+; s--->a-->b-->c
+;  \   ^   ^
+;   \  |   |
+;    \ V   V
+;     >d-->e-->f-->g
+
+
+; profondeur donne le chemin dans graphe d'un noeud de depart (init)
+; a un noeud d'arrivee (but);
+; Exemple: (profondeur 'a 'g) ==> (a b e f g)
+
+(de profondeur (init but)
+ (prof init but ()))
+
+;chemin deja parcouru (donc sans init)
+(de prof (init but chemin)
+ (cond
+  ((equal init but) (reverse (cons init chemin)))
+  ((member init chemin) ()) ;boucle
+  (t (profs (successeurs init) but (cons init chemin))) ))
+
+(de profs (lnoeuds but chemin)
+ (and lnoeuds 
+      (or (prof (car lnoeuds) but chemin)
+          (profs (cdr lnoeuds) but chemin))))
+
+(de successeurs (noeud)
+ (cdr (assoc noeud graphe)))
+
+(de assoc (s l)
+  ( cond ((atom l) nil)
+         ((and (null(atom (car l))) (equal s (caar l))) (car l))
+         (t (assoc s (cdr l))) ))
+
+(de reverse (s)
+  (rev2 s nil))
+
+(de rev2 (s r) (if (atom s) r (rev2 (cdr s) (cons (car s) r)) ) )
+
+

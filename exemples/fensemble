@@ -1,0 +1,35 @@
+; Fonctions sur les ensemble
+( load 'fonctions)
+( de card(e)  ; le cardinal évidemment
+  ( cond
+ 	(	( not ( listp e)) ; verifions que e est une liste
+     		( print '!!ERREUR_argument_doit_etre_une_liste )
+		nil
+	)
+	( 	(nullp e)	
+		0
+	)
+	( 	t
+		(add 1 ( card ( cdr e )))
+	)
+)
+)
+
+( de isthere ( e  l )  ; un élément est - il present ?
+( cond
+ 	( ( not ( listp l)) ; verifions que l est une liste
+     		( print '!!ERREUR_argument_2_doit_etre_une_liste )
+		nil
+	)
+
+	(  (nullp l) nil )
+	(  (equal (car l ) e)
+	    e
+	)
+ 	( t 
+	   (isthere  e ( cdr l))
+	)
+)
+)
+
+

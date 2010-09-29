@@ -1,0 +1,9 @@
+;  --Lispi par Jerome Eteve & Arnaud Ceol--
+;  --     Maitrise informatique USTL     --
+;  --            2000/2001               --
+
+; Fichier de sauvegarde critique
+;   faite un load de ce fichier
+;   pour retaurer l'environnement
+
+()

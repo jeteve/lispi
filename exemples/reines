@@ -1,0 +1,45 @@
+; placer n reines sur un echiquier nxn sans qu'elles se prennent
+;-----------------------------------------------------------------
+
+; predicat de prise
+(de prise (i j a b)
+   (or (eqn i a) ; meme ligne
+       (eqn j b) ; meme colonne
+       (eqn (sub i j) (sub a b)) ;sw-ne diagonale
+       (eqn (add i j) (add a b)) ;nw-se diagonale
+   )
+)
+; predicat qui dit si une position n m est possible pour une
+; nouvelle reine
+; echiquier = liste des coordonnees des reines
+; exemple ((0 0)(1 3) (2 0))
+(de conflit (n m echiquier)
+   (if (nullp echiquier) nil
+         (or (prise n m (car (car echiquier)) (car (cdr (car echiquier))))
+              (conflit n m (cdr echiquier)))))
+
+; on recherche dans la ligne n a partir de la colonne m 
+(de colonne (echiquier n m size)
+   (cond 
+         ; si ligne epuisee on arrete
+         ((eqn m size) nil)     
+         ; dans le cas contraire
+         (t (cond 
+                  ; si conflit on ne fait rien
+                  ((conflit n m echiquier) nil) 
+                  ; sinon on ajoute une reine et on passe a la ligne suivante 
+                  (t (ligne  (cons (list n m) echiquier) (add n 1) size)))
+            ; on avance 
+            (colonne echiquier n (add m 1) size))))
+
+; on recherche dans la ligne n
+(de ligne (echiquier n size)
+   (cond 
+         ; si on a epuise toute les lignes
+         ((eqn n size) (print echiquier))
+         ; sinon
+         (t (colonne echiquier n 0 size))))
+
+; on recherche dans tout l'echiquier
+(de reines (size) (ligne nil 0 size))
+

@@ -1,0 +1,25 @@
+# KDE Config File
+[Breakpoint 0]
+Enabled=true
+Temporary=false
+File=essai.c
+Line=5
+[Breakpoint 1]
+Enabled=true
+Temporary=false
+File=essai.c
+Line=6
+[Breakpoint 2]
+Enabled=true
+Temporary=false
+File=symboles.c
+Line=137
+[Breakpoint 3]
+Enabled=true
+Temporary=false
+File=essai.c
+Line=16
+[General]
+WorkingDirectory=
+FileVersion=1
+ProgramArgs=

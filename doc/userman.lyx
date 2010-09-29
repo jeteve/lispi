@@ -1,0 +1,7287 @@
+#This file was created by <jerome> Wed Jan 24 17:28:17 2001
+#LyX 0.12 (C) 1995-1998 Matthias Ettrich and the LyX Team
+\lyxformat 2.15
+\textclass book
+\language french
+\inputencoding latin1
+\fontscheme default
+\graphics default
+\paperfontsize 12
+\spacing single 
+\papersize a4paper
+\paperpackage a4
+\use_geometry 1
+\use_amsmath 1
+\paperorientation portrait
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle headings
+
+\layout Title
+
+LISPInterpréteur
+\newline 
+V 1.0
+\newline 
+Manuel de l'utilisateur.
+\layout Author
+
+Jérôme Etévé & Arnaud Ceol,
+\newline 
+Maîtrise informatique USTL, année 2000/2001
+\layout Standard
+
+
+\begin_inset LatexCommand \tableofcontents
+
+\end_inset 
+
+
+\layout Standard
+\pagebreak_top 
+Merci d'avoir choisi Lispi, nous espérons que ce programme vous donnera
+ entière satisfaction.
+ N'hésitez pas à nous contacter pour les éventuels problèmes que vous rencontrer
+ez ainsi que pour vos suggestions pour des versions futures.
+\layout Chapter
+
+Préliminaires.
+\layout Section
+
+Contacts.
+\layout Standard
+
+Ce logiciel ainsi que ce manuel ont été écrits par Jérôme Etévé et Arnaud
+ Céol, étudiants en maîtrise d'informatique de l'Université de Sciences
+ et Technologies de Lille ( USTL ).
+ Vous pouvez les contacter aux adresses suivantes :
+\newline 
+
+\layout Address
+
+jerome.eteve@free.fr ou eteve@fil.univ-lille1.fr
+\layout Address
+
+ceol@fil.univ-lille1.fr
+\layout Standard
+
+Consultez aussi le site web : http://www.chez.com/lispi/ .
+\layout Standard
+
+Vous y trouverez la dernière version de ce programme ainsi que des liens
+ vers des sites relatifs au LISP.
+\layout Section
+
+Avertissements.
+\layout Itemize
+
+Ce manuel n'est pas un tutoriel de LISP, vous n'y trouverez pas de conseils
+ sur la programmation LISP proprement dite.
+\layout Itemize
+
+Ce manuel n'est pas un manuel d'installation.
+ Pour les détails concernant l'installation, lire le fichier README.install.
+\layout Itemize
+
+Ce manuel est fourni uniquement à titre informatif.
+ Les auteurs du programme se réservent le droit de modifier ou d'ajouter
+ des fonctionnalités non-présentées dans le présent manuel.
+\layout Section
+
+Conventions
+\begin_inset LatexCommand \index{conventions}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \label{sec: convention}
+
+\end_inset 
+
+ utilisées dans ce manuel.
+\layout Standard
+
+Différents styles de caractères sont utilisés dans ce manuel :
+\layout Itemize
+
+Le style normal : 
+\begin_inset Quotes eld
+\end_inset 
+
+voici un exemple
+\begin_inset Quotes erd
+\end_inset 
+
+.
+\layout Itemize
+
+Le style typewriter :
+\family typewriter 
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+ correspond à des exemples d'entrées de l'utilisateur 
+\newline 
+ou de sorties de l'interpréteur 
+\begin_inset Quotes eld
+\end_inset 
+
+.
+\layout Itemize
+
+Le style sansSerif : correspond à une grammaire de passage des arguments
+ à une fonction.
+\newline 
+conventions : 
+\family sans 
+
+\newline 
+argument_obligatoire 
+\newline 
+[ argument_optionnel ] 
+\newline 
+cet_argument | ou_celui_la 
+\newline 
+{arguments_en_nombre_quelconques}
+\layout Section
+
+Exemples.
+\layout Standard
+
+Tous les exemples de ce manuel ainsi que d'autres sont fournis dans les
+ fichiers textes situés dans le répertoire 
+\begin_inset Quotes eld
+\end_inset 
+
+exemples
+\begin_inset Quotes erd
+\end_inset 
+
+ du programme.
+\layout Part
+
+Quelques Bases.
+\layout Standard
+
+Pour lancer Lispi, tapez simplement 
+\begin_inset Quotes eld
+\end_inset 
+
+lispi
+\begin_inset Quotes erd
+\end_inset 
+
+ dans une console, si exécutable est dans votre PATH.
+ Lisez le README.install en cas d'échec.
+\layout Chapter
+
+Les entrées.
+\layout Section
+
+Caractères acceptés
+\begin_inset LatexCommand \index{caractere}
+
+\end_inset 
+
+.
+\layout Standard
+
+Les caractères acceptés par l'interpréteur sont les caractères ASCII
+\begin_inset LatexCommand \index{ASCII}
+
+\end_inset 
+
+ de code 0 a 126 (cf 
+\begin_inset LatexCommand \ref{sec: caractere}
+
+\end_inset 
+
+).
+ 
+\layout Standard
+
+Lispi est 
+\begin_inset Quotes eld
+\end_inset 
+
+case-sensitive
+\begin_inset Quotes erd
+\end_inset 
+
+, c'est à dire que 
+\family typewriter 
+'a'
+\family default 
+ est considéré comme différent de 
+\family typewriter 
+'A'
+\family default 
+, et par extension 
+\family typewriter 
+
+\begin_inset Quotes eld
+\end_inset 
+
+AToME
+\begin_inset Quotes erd
+\end_inset 
+
+
+\family default 
+ est considéré comme différent de 
+\family typewriter 
+
+\begin_inset Quotes eld
+\end_inset 
+
+ATOME
+\begin_inset Quotes erd
+\end_inset 
+
+
+\family default 
+.
+\layout Standard
+
+Les caractères non-imprimables, de code 0 a 32 ( espaces, retours chariot,
+ tabulations ...
+ ) sont considérés par l'interpréteur comme des espaces
+\begin_inset LatexCommand \index{espace}
+
+\end_inset 
+
+ séparateurs.
+\layout Standard
+
+Les caractères de code supérieur à 126 ( dont entre autres tous les caractères
+ accentués ) sont refusés.
+ Lorsqu'il en rencontre un, l'interpréteur émet un warning et ignore ce
+ caractère.
+ Il n'est donc pas gênant d'inclure des caractères interdits dans les sources
+ LISP.
+\layout Standard
+
+
+\family typewriter 
+1>
+\protected_separator 
+ caractère
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+WARNING: caractere 'è' non valide (l1,c7) => Ignore
+\layout Standard
+
+Par contre, des caractères interdits peuvent apparaître dans les commentaires
+ (cf 
+\begin_inset LatexCommand \ref{sec: commentaire}
+
+\end_inset 
+
+) sans provoquer de warning.
+\layout Standard
+
+
+\family typewriter 
+2> ; caractère 
+\layout Section
+
+Les commentaires
+\begin_inset LatexCommand \index{commentaire}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \label{sec: commentaire}
+
+\end_inset 
+
+.
+\layout Standard
+
+Dans une ligne de code LISP, si un caractère ';' apparaît, le reste de la
+ ligne est considéré comme du commentaire par l'interpréteur.
+ Tout les caractères, même accentués peuvent apparaître dans les commentaires.
+\layout Standard
+
+
+\family typewriter 
+9> ( add ; voici du commentaire
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ 3
+\protected_separator 
+
+\protected_separator 
+ ; qui continue ici
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ 4
+\protected_separator 
+
+\protected_separator 
+ ; avec des caractères accentués .
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ .
+ mul )
+\layout Section
+
+Les mots du LISP
+\begin_inset LatexCommand \label{sec: mots}
+
+\end_inset 
+
+.
+\layout Standard
+
+Les mots réservés
+\begin_inset LatexCommand \index{mots reservés}
+
+\end_inset 
+
+ dans la grammaire du LISP sont très peu nombreux, il sont monocaractères
+ :
+\layout Itemize
+
+La parenthèse ouvrante
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\begin_inset Quotes eld
+\end_inset 
+
+)
+\begin_inset Quotes erd
+\end_inset 
+
+ ,
+\layout Itemize
+
+La parenthèse fermante
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\begin_inset Quotes eld
+\end_inset 
+
+(
+\begin_inset Quotes eld
+\end_inset 
+
+ ,
+\layout Itemize
+
+le point
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\begin_inset Quotes eld
+\end_inset 
+
+.
+\begin_inset Quotes erd
+\end_inset 
+
+ ,
+\layout Itemize
+
+l'apostrophe
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\begin_inset Quotes eld
+\end_inset 
+
+ ' 
+\begin_inset Quotes eld
+\end_inset 
+
+ .
+\layout Standard
+
+Tout autre mot, c'est a dire toute suite de caractères imprimables
+\begin_float footnote 
+\layout Standard
+
+Excéptés les caractères réservés et le marqueur de commentaire.
+\end_float 
+ , est considéré comme un atome
+\begin_inset LatexCommand \index{atome}
+
+\end_inset 
+
+ (cf 
+\begin_inset LatexCommand \ref{sec: atome}
+
+\end_inset 
+
+) .
+ 
+\newline 
+Voici des exemples d'atomes valides :
+\layout Standard
+
+
+\family typewriter 
++122
+\protected_separator 
+
+\protected_separator 
+ *to/to
+\protected_separator 
+
+\protected_separator 
+ 33export
+\protected_separator 
+
+\protected_separator 
+ LaTeX 
+\protected_separator 
+
+\protected_separator 
+[]
+\protected_separator 
+
+\protected_separator 
+$$
+\protected_separator 
+
+\protected_separator 
+!#
+\layout Standard
+
+Les mots sont séparés les uns des autres soit par un autre mot, soit par
+ un ou plusieurs caractères non-imprimables, soit par un commentaire.
+\layout Standard
+
+
+\family typewriter 
+(voici'des
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+mots;commentaire
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+séparés.
+\layout Section
+
+Les atomes
+\begin_inset LatexCommand \index{atome}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \label{sec: atome}
+
+\end_inset 
+
+.
+\layout Standard
+
+Comme vu a la section 
+\begin_inset LatexCommand \ref{sec: mots}
+
+\end_inset 
+
+, un atome est une suite de caractères imprimables, en excluant les caractères
+ réservés ainsi que les commentaires.
+ Avec cet interpréteur, les atomes ne peuvent pas avoir plus de 255 caractères.
+ Si vous écrivez un atome de plus de 255 caractères, l'interpréteur émet
+ un warning et ne retiens que les 255 premiers caractères de l'atome.
+ On distingue 2 catégories d'atomes :
+\layout Subsection
+
+Les nombres.
+\begin_inset LatexCommand \label{sec: nombre}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\begin_inset LatexCommand \index{nombre}
+
+\end_inset 
+
+ Ce sont des suites de caractères exclusivement numériques éventuellement
+ précédés d'un signe + ou - .
+\newline 
+exemples : 
+\family typewriter 
+12 +852 -58611
+\layout Standard
+
+Les nombres sont codés comme des entiers standard de la bibliothèque C du
+ système sur lequel tourne l'interpréteur.
+ Par exemple sur un système 32bits, il peuvent aller de -2147483648 à 2147483647.
+ En cas de dépassement, aucun warning n'est prévu dans cette version, et
+ on obtient :
+\layout Standard
+
+
+\family typewriter 
+5> -8965858547558547558745
+\layout Standard
+
+
+\family typewriter 
+=-2147483648
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+
+\layout Standard
+
+
+\family typewriter 
+6> +123123123123123123123123123123
+\layout Standard
+
+
+\family typewriter 
+=2147483647
+\layout Subsection
+
+Les symboles
+\begin_inset LatexCommand \label{sec: symbole}
+
+\end_inset 
+
+.
+\layout Standard
+
+Tout atome n'étant pas un nombre est un symbole
+\begin_inset LatexCommand \index{symbole}
+
+\end_inset 
+
+.
+\newline 
+exemples de symboles : 
+\family typewriter 
+8toto8 %! to-to add && -- ++ - / *
+\family default 
+ 
+\layout Section
+
+Les listes
+\begin_inset LatexCommand \index{liste}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \label{sec: liste}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{phrase}
+
+\end_inset 
+
+.
+\layout Standard
+
+Une liste , appelée aussi 
+\begin_inset Quotes eld
+\end_inset 
+
+phrase
+\begin_inset Quotes erd
+\end_inset 
+
+ est une suite de mots commençant par le mot réservé 
+\family typewriter 
+'('
+\family default 
+ et se terminant par le mot réservé 
+\family typewriter 
+')'
+\family default 
+.
+ Les deux derniers mots avant 
+\family typewriter 
+')'
+\family default 
+ peuvent éventuellement être le mot réservé
+\family typewriter 
+ '.' 
+\family default 
+suivi d'un et d'un seul mot.
+ Vous trouverez la description formelle de ce qu'est une liste (ou une phrase)
+ à l'annexe 
+\begin_inset LatexCommand \ref{sec: grammaire}
+
+\end_inset 
+
+.
+\layout Chapter
+
+Symboles prédéfinis.
+ 
+\begin_inset LatexCommand \index{symboles réservés}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{symboles prédéfinis}
+
+\end_inset 
+
+
+\layout Standard
+
+Les symboles prédéfinis ne peuvent pas très utilisé pour donner un nom à
+ une variable ou à une fonction utilisateur.
+\layout Standard
+
+Il existe trois catégories de symboles prédéfinis :
+\layout Section
+
+Vrai et Faux
+\begin_inset LatexCommand \index{vrai}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{faux}
+
+\end_inset 
+
+.
+\layout Standard
+
+La valeur Booléenne 
+\begin_inset Quotes eld
+\end_inset 
+
+faux
+\begin_inset Quotes erd
+\end_inset 
+
+ est toujours représentée par le symbole 
+\begin_inset Quotes eld
+\end_inset 
+
+
+\family typewriter 
+nil
+\family default 
+
+\begin_inset Quotes erd
+\end_inset 
+
+
+\begin_inset LatexCommand \index{nil}
+
+\end_inset 
+
+ .
+ De manière générale, tout ce qui ne vaut pas nil est considéré comme vrai
+ par les fonctions travaillant sur des booléens ou devant renvoyer des booléens.
+ Cependant, dans certains cas, il est nécessaire d'utiliser un symbole spécifiqu
+e pour représenter la valeur 
+\begin_inset Quotes eld
+\end_inset 
+
+vrai
+\begin_inset Quotes erd
+\end_inset 
+
+ : ce symbole est 
+\begin_inset Quotes eld
+\end_inset 
+
+
+\family typewriter 
+t
+\family default 
+
+\begin_inset Quotes erd
+\end_inset 
+
+
+\begin_inset LatexCommand \index{t}
+
+\end_inset 
+
+ (comme 
+\begin_inset Quotes eld
+\end_inset 
+
+true
+\begin_inset Quotes erd
+\end_inset 
+
+).
+\layout Description
+
+nil
+\protected_separator 
+: Il joue un rôle particulier, puisqu'il représente à la fois la valeur
+ booléenne 
+\begin_inset Quotes eld
+\end_inset 
+
+faux
+\begin_inset Quotes erd
+\end_inset 
+
+, la liste vide et l'atome nul.
+ On à l'équivalence entre 
+\family typewriter 
+
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+
+\family default 
+,
+\family typewriter 
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+'()
+\begin_inset Quotes erd
+\end_inset 
+
+
+\family default 
+ et 
+\family typewriter 
+
+\begin_inset Quotes eld
+\end_inset 
+
+()
+\begin_inset Quotes erd
+\end_inset 
+
+
+\family default 
+.
+ C'est également le symbole que renvoie l'interpréteur en cas d'erreur d'évaluat
+ion ( voir 
+\begin_inset LatexCommand \ref{sec: evaluation}
+
+\end_inset 
+
+ ).
+\layout Section
+
+Symboles spéciaux.
+\begin_inset LatexCommand \label{sec: symboles speciaux}
+
+\end_inset 
+
+
+\layout Standard
+
+Ce sont les symboles 
+\begin_inset Quotes eld
+\end_inset 
+
+quote
+\begin_inset Quotes erd
+\end_inset 
+
+
+\begin_inset LatexCommand \index{quote}
+
+\end_inset 
+
+( voir 
+\begin_inset LatexCommand \ref{sec: evaluation}
+
+\end_inset 
+
+ ) et 
+\begin_inset Quotes eld
+\end_inset 
+
+lambda
+\begin_inset Quotes erd
+\end_inset 
+
+
+\begin_inset LatexCommand \index{lambda}
+
+\end_inset 
+
+.
+\layout Section
+
+Fonctions prédéfinies.
+\layout Standard
+
+Un certain nombre de symboles prédéfinis représentent en fait des fonctions
+ prédéfinies de l'interpréteur.
+ Vous trouverez la liste exhaustive de ces fonctions dans la partie 
+\begin_inset LatexCommand \ref{sec: fonctions}
+
+\end_inset 
+
+ qui leurs est consacrée.
+\layout Chapter
+
+Comportement
+\begin_inset LatexCommand \index{comportement}
+
+\end_inset 
+
+ de l'interpréteur.
+\layout Section
+
+Après une erreur de syntaxe
+\begin_inset LatexCommand \index{erreur de syntaxe}
+
+\end_inset 
+
+.
+\layout Standard
+
+Après une erreur de syntaxe
+\begin_inset LatexCommand \index{syntaxe}
+
+\end_inset 
+
+, l'interpréteur cherche à lire une nouvelle phrase LISP, juste après la
+ dernière erreur.
+ Généralement, cela donne des messages d'erreur en cascade.
+ Il suffit bien souvent de corriger la première erreur pour que les suivantes
+ disparaissent.
+\layout Standard
+
+Exemple :
+\layout Standard
+
+
+\family typewriter 
+18> ( une phrase .
+ a erreur )
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+! SYNTAX ERROR at (l18,c24):
+\protected_separator 
+Parenthese fermante attendue,found 'erreur'
+\layout Standard
+
+
+\family typewriter 
+:-( Ce n'est pas du lisp
+\protected_separator 
+ !!
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+! SYNTAX ERROR at (l19,c0):
+\protected_separator 
+ Attendu : Atome, ou ''', ou '(' , found ')'
+\layout Standard
+
+
+\family typewriter 
+18> :-( Ce n'est pas du lisp
+\protected_separator 
+ !!
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+
+\layout Standard
+
+
+\family typewriter 
+19> ( une phrase .
+ ( sans erreur ) )
+\layout Standard
+
+
+\family typewriter 
+:-D C'est du lisp
+\layout Section
+
+Interprétation
+\begin_inset LatexCommand \index{interpretation}
+
+\end_inset 
+
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+dès que possible
+\begin_inset Quotes erd
+\end_inset 
+
+.
+\layout Standard
+
+L'interpréteur cherche à interpréter une phrase dès que la fin de celle-ci
+ est atteinte
+\begin_float footnote 
+\layout Standard
+
+Losrques toutes les parenthèses ouvrantes ont étées fermées.
+\end_float 
+.
+ Il considère ensuite que l'utilisateur cherche a rentrer une nouvelle phrase.
+ Il peut y avoir plusieurs phrases par ligne et/ou plusieurs lignes par
+ phrase.
+\layout Standard
+
+Exemples :
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+7> ( voila la premiere ) ( la deuxieme
+\layout Standard
+
+
+\family typewriter 
+:-D C'est du lisp
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+7> continue ici )
+\layout Standard
+
+
+\family typewriter 
+:-D C'est du lisp
+\newline 
+
+\layout Standard
+
+
+\family typewriter 
+9> ( voici
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ une
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ( phrase
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ multi-
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ )
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ .
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ lignes
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+)
+\layout Standard
+
+
+\family typewriter 
+:-D C'est du lisp
+\layout Chapter
+
+Évaluation
+\begin_inset LatexCommand \index{evaluation}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \label{sec: evaluation}
+
+\end_inset 
+
+.
+\layout Standard
+
+Lispi évalue une phrase de la manière suivante :
+\newline 
+Le premier symbole d'une phrase est considéré comme un appel à une fonction
+ (voir 
+\begin_inset LatexCommand \ref{sec: fonctions}
+
+\end_inset 
+
+).
+ Le reste de la liste est passé en argument à cette fonction.
+ Les phrases
+\begin_float footnote 
+\layout Standard
+
+eventuellement des atomes.
+\end_float 
+ suivant cet appel sont évaluées récursivement
+\begin_float footnote 
+\layout Standard
+
+sauf pour les fonctions de controles qui evaluent elle-meme leurs arguments.
+\end_float 
+, et les résultats sont donnés en paramètre à la fonction appelée.
+ Si un atome suit un point à la fin d'une phrase, cet atome (voir 
+\begin_inset LatexCommand \ref{sec: atome}
+
+\end_inset 
+
+) est ignoré par l'interpréteur.
+\layout Standard
+
+Exemples :
+\newline 
+
+\family typewriter 
+> ( add ( mul 2 6 ) 3 )
+\newline 
+=15
+\newline 
+> ( div 6 3 .
+ a)
+\newline 
+=2
+\layout Section
+
+Interdire l'évaluation.
+\layout Standard
+
+Il est souvent utile de protéger certaines phrases contre l'action de l'évaluate
+ur.
+ Par exemple dans le cas ou ces phrases représentent des données et non
+ des appels à des fonctions.
+ On utilise alors le caractère '
+\family typewriter 
+'
+\family default 
+' devant la phrase à protéger.
+ On peut aussi faire appel à une pseudo fonction nommée 
+\begin_inset Quotes eld
+\end_inset 
+
+quote
+\begin_inset Quotes erd
+\end_inset 
+
+
+\begin_inset LatexCommand \index{quote}
+
+\end_inset 
+
+.
+ 
+\layout Standard
+
+Exemples :
+\newline 
+
+\family typewriter 
+ > '(a b c)
+\newline 
+=(a b c)
+\family default 
+
+\newline 
+est équivalent à :
+\newline 
+
+\family typewriter 
+> (quote (a b c))
+\newline 
+=(a b c)
+\layout Section
+
+En cas d'erreur
+\begin_inset LatexCommand \index{erreur d'évaluation}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \label{sec: erreur evaluation}
+
+\end_inset 
+
+.
+\layout Standard
+
+En cas d'erreur au cours de l'évaluation, l'interpréteur affiche un message
+ d'erreur (voir 
+\begin_inset LatexCommand \ref{sec: erreurs}
+
+\end_inset 
+
+ ), suivi de la liste des appels qui ont menés à cette erreur
+\begin_float footnote 
+\layout Standard
+
+en commencant par le dernier appel
+\end_float 
+, puis arrête l'évaluation de la phrase en cours.
+ 
+\layout Standard
+
+Par exemple :
+\newline 
+
+\family typewriter 
+11>
+\protected_separator 
+ ( add ( div 5 6 8 ) ( mul ( div 'a)))
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+!! ERREUR dans div, nombre attendu
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+ dans l'appel de div
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+ dans l'appel de mul
+\layout Standard
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+ dans l'appel de add
+\layout Standard
+
+
+\family typewriter 
+=nil
+\layout Standard
+
+Comme on peut le voir sur cet exemple, en cas d'erreur, l'évaluation renvoie
+ toujours 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ .
+\layout Chapter
+
+Arrêt violent de l'interpréteur
+\begin_inset LatexCommand \index{arrêt violent}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \label{sec: arret violent}
+
+\end_inset 
+
+.
+\layout Standard
+
+En utilisation normale de LISPI, vous terminez votre session de travail
+ par un appui simultané sur les touches [CONTROL] et [D].
+ Cependant, il existe plusieurs cas ou le programme peut se terminer de
+ manière violente.
+\layout Section
+
+Arrêt forcé par l'utilisateur.
+\layout Standard
+
+Il se peut qu'au cours de votre travail avec LISPI vous lanciez une évaluation
+ et que cette évaluation prenne beaucoup trop de temps.
+ A ce moment la, vous regrettez d'avoir lancé cette évaluation.
+ Vous interrompez alors l'évaluateur par un appui simultané sur [CONTROL]
+ et [C].
+ Voyons un petit exemple :
+\layout Quote
+
+
+\family typewriter 
+3> ( de fibo(i) ; calcul du i-ème terme de la suite de fibonnacci
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ( if (<= i 2 ) 1 ; les 2 premiers termes sont 1
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ (+ (fibo (1- i)) (fibo (- i 2)))
+\protected_separator 
+ ; d'apres la formule f(i)=f(i-1)+f(i-2)
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ )
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+) 
+\newline 
+=fibo
+\newline 
+8> ( fibo 30)
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+* recu signal SIGINT
+\protected_separator 
+ * 
+\newline 
+
+\protected_separator 
+Tentative de sauvegarde de l'environnement 
+\newline 
+dans le fichier last_session .
+ 
+\newline 
+
+\protected_separator 
+:-D
+\protected_separator 
+ REUSSI ( ouf ) !! 
+\newline 
+
+\protected_separator 
+"""
+\protected_separator 
+ Relancer le programme et faites ( load 'last_session ) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ pour restaurer l'environnement courant.
+ 
+\newline 
+
+\protected_separator 
+! QUITTEZ PAR [CONTROL-D] LA PROCHAINE FOIS !
+\layout Standard
+
+Cette définition de la fonction fibo
+\begin_inset LatexCommand \index{fibonacci}
+
+\end_inset 
+
+ est conforme à la définition mathématique mais fait exploser le temps de
+ calcul dès que le terme demandé est un peu éloigné du début de la suite.
+ Ainsi, après avoir lancer l'évaluation de (fibo 30), vous attendez et après
+ quelques instant, vous interrompez le programme par [CONTROL] [C].
+ Comme on peut le voir, lispi tente de sauvegarder votre environnement de
+ travail ( toutes vos fonctions et variables ) dans le fichier 
+\begin_inset Quotes eld
+\end_inset 
+
+last_session
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ Il vous suffit alors de relancer le programme, puis de faire (load 'last_sessio
+n) pour retrouver votre environnement précédent.
+\layout Section
+
+Arrêt forcé par l'interpréteur lui-même.
+\layout Standard
+
+Il se peut que lors de l'évaluation d'une phrase, l'évaluateur sature sa
+ mémoire interne, dès lors, plus aucune évaluation n'est possible par l'interpré
+teur et celui-ci s'interrompt brutalement, toujours en tentant de sauvergarder
+ votre travail dans le fichier 
+\begin_inset Quotes eld
+\end_inset 
+
+last_session
+\begin_inset Quotes erd
+\end_inset 
+
+ comme dans le cas d'un arrêt par l'utilisateur.
+ Ce cas de figure arrive souvent lorsque vous lancez une fonction récursive
+ qui s'enfonce trop dans la recursivité ( par exemple lorsque vous oubliez
+ une condition d'arrêt dans une fonction récursive ).
+ Par exemple :
+\layout Quote
+
+
+\family typewriter 
+4> (de fact(n) ( mul n ( fact (1- n)))) 
+\newline 
+=fact 
+\newline 
+
+\protected_separator 
+5> ( fact 3) 
+\newline 
+
+\protected_separator 
+!! ERREUR INTERNE plus de place libre dans l'espace des doublets 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ Probable recursion trop profonde !! 
+\newline 
+
+\protected_separator 
+Le programme va se terminer !! 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+* recu signal SIGUSR1
+\protected_separator 
+ * 
+\newline 
+
+\protected_separator 
+Tentative de sauvegarde de l'environnement 
+\newline 
+dans le fichier last_session .
+ 
+\newline 
+
+\protected_separator 
+:-D
+\protected_separator 
+ REUSSI ( ouf ) !! 
+\newline 
+
+\protected_separator 
+"""
+\protected_separator 
+ Relancer le programme et faite ( load 'last_session ) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ pour restaurer l'environnement courant.
+\layout Standard
+
+On à oublié une condition d'arrêt dans la fonction fact et la récursion
+ s'enfonce jusqu'à ce que la mémoire soit saturée.
+ On peut aussi saturer la mémoire de Lispi lorsque les objets stocké dans
+ l'environnement sont trop nombreux et/ou trop volumineux.
+\layout Standard
+
+Qu'ils soient provoqués par l'utilisateur ou par l'interpréteur, ces 2 derniers
+ cas d'arrêt relèvent de la responsabilité de l'utilisateur.
+ 
+\layout Section
+
+Arrêt provoqué par le système.
+\layout Standard
+
+Il se peut que Lispi soit interrompu brutalement par votre système d'exploitatio
+n.
+ CE CAS EST UN BUG du programme.
+ Lispi tente quand même de sauvegarder votre environnement de travail dans
+ le fichier 
+\begin_inset Quotes eld
+\end_inset 
+
+last_session
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ Dans ce cas, contactez les programmeurs et faites un rapport de bug.
+\layout Standard
+
+Exemple d'interruption par le système :
+\layout Quote
+
+
+\family typewriter 
+1> 
+\newline 
+
+\protected_separator 
+* recu signal SIGSEGV
+\protected_separator 
+ * 
+\newline 
+
+\protected_separator 
+Tentative de sauvegarde de l'environnement 
+\newline 
+dans le fichier last_session .
+ 
+\newline 
+
+\protected_separator 
+:-D
+\protected_separator 
+ REUSSI ( ouf ) !! 
+\newline 
+
+\protected_separator 
+"""
+\protected_separator 
+ Relancer le programme et faite ( load 'last_session ) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ pour restaurer l'environnement courant.
+ 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+! QUITTEZ PAR [CONTROL-D] LA PROCHAINE FOIS !
+\layout Part
+
+Fonctions Prédéfinies
+\begin_inset LatexCommand \index{fonctions}
+
+\end_inset 
+
+.
+\begin_inset LatexCommand \label{sec: fonctions}
+
+\end_inset 
+
+
+\layout Standard
+
+Pour chaque fonction, vous trouverez :
+\layout Itemize
+
+Comment l'appeler,
+\layout Itemize
+
+Quels doivent être ses paramètres : le non-respect de cette partie entraîne
+ toujours une erreur à l'évaluation ( voir 
+\begin_inset LatexCommand \ref{sec: evaluation}
+
+\end_inset 
+
+ ).
+\layout Itemize
+
+Quels sont ses éventuels effets de bord,
+\layout Itemize
+
+Quel est la valeur retournée par cette fonction.
+\layout Standard
+
+Les cas d'erreurs possibles ne sont pas décrits pour chaque fonction.
+ Cependant, à l'utilisation, l'évaluateur vous indiquera explicitement quelle
+ erreur vous avez commise pour quelle fonction.
+ Pour éviter ces messages, respectez le format des arguments donné pour
+ chaque fonctions ( voir 
+\begin_inset LatexCommand \ref{sec: convention}
+
+\end_inset 
+
+ ).
+\layout Standard
+
+De manière générale, Lispi est tolérant envers les arguments en surplus
+ dans l'appel d'une fonction : il les ignore.
+\layout Chapter
+
+Fonctions numériques
+\begin_inset LatexCommand \index{fonctions numériques}
+
+\end_inset 
+
+.
+\layout Standard
+
+Dans cette version, les fonctions numériques ne travaillent que sur des
+ nombres entiers (voir 
+\begin_inset LatexCommand \ref{sec: nombre}
+
+\end_inset 
+
+).
+ Aucun contrôle de dépassement de capacité sur les entiers n'est implémenté.
+\layout Section
+
+Fonctions d'arité quelconque.
+\layout Subsection
+
+add
+\begin_inset LatexCommand \index{add}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{+}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+( add
+\family default 
+ 
+\family sans 
+{ nombre }
+\family default 
+ 
+\family typewriter 
+)
+\family default 
+
+\newline 
+
+\family typewriter 
+( +
+\family default 
+ 
+\family sans 
+{ nombre }
+\family default 
+ 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: Effectue l'addition de tout les nombres (éventuellement aucun) passés
+ en paramètres.
+\layout Description
+
+valeur
+\protected_separator 
+de
+\protected_separator 
+retour
+\protected_separator 
+: Le résultat de l'addition; valeur du premier paramètre si il est seul;
+ 0 si aucun paramètre n'est donné; 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ si une erreur est survenue.
+\layout Subsection
+\pagebreak_top 
+sub
+\begin_inset LatexCommand \index{sub}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{-}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(sub
+\family default 
+ 
+\family sans 
+{ nombre }
+\family default 
+ 
+\family typewriter 
+)
+\family default 
+
+\newline 
+
+\family typewriter 
+(-
+\family default 
+ 
+\family sans 
+{ nombre }
+\family default 
+ 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: Effectue la soustraction de tout les nombres (éventuellement aucun) passés
+ en paramètres.
+\layout Description
+
+valeur
+\protected_separator 
+de
+\protected_separator 
+retour
+\protected_separator 
+: Le résultat de la soustraction; valeur du premier paramètre si il est
+ seul; 0 si aucun paramètre n'est donné; 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ si une erreur est survenue.
+\layout Subsection
+\pagebreak_top 
+mul
+\begin_inset LatexCommand \index{mul}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{-}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(mul
+\family default 
+ 
+\family sans 
+{ nombre }
+\family default 
+ 
+\family typewriter 
+)
+\family default 
+
+\newline 
+
+\family typewriter 
+(*
+\family default 
+ 
+\family sans 
+{ nombre }
+\family default 
+ 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: Effectue la multiplication de tout les nombres (éventuellement aucun)
+ passés en paramètres.
+\layout Description
+
+valeur
+\protected_separator 
+de
+\protected_separator 
+retour
+\protected_separator 
+: Le résultat de la multiplication; valeur du premier paramètre si il est
+ seul; 1 si aucun paramètre n'est donné; 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ si une erreur est survenue.
+\layout Subsection
+\pagebreak_top 
+div
+\begin_inset LatexCommand \index{div}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{/}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(div
+\family default 
+ 
+\family sans 
+{ nombre }
+\family default 
+ 
+\family typewriter 
+)
+\family default 
+
+\newline 
+
+\family typewriter 
+(/
+\family default 
+ 
+\family sans 
+{ nombre }
+\family default 
+ 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: Effectue la division entière entre tout les nombres (éventuellement aucun)
+ passés en paramètres.
+\layout Description
+
+valeur
+\protected_separator 
+de
+\protected_separator 
+retour
+\protected_separator 
+: Le résultat de la division entière; valeur du premier paramètre si il
+ est seul; 1 si aucun paramètre n'est donné; 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ si une erreur est survenue.
+\layout Subsection
+\pagebreak_top 
+max
+\begin_inset LatexCommand \index{max}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(max
+\family default 
+ 
+\family sans 
+{ nombre }
+\family default 
+ 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: trouve le max entre tout les nombres (éventuellement aucun) passés en
+ paramètres.
+\layout Description
+
+valeur
+\protected_separator 
+de
+\protected_separator 
+retour
+\protected_separator 
+: le max de la suite de nombres; le plus petit entier
+\begin_float footnote 
+\layout Standard
+
+en effet, on considère que le plus petit entier est l'élément neutre pour
+ l'opération max.
+\end_float 
+ si aucun paramètre n'est donné; 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ si une erreur est survenue.
+\layout Subsection
+\pagebreak_top 
+min
+\begin_inset LatexCommand \index{min}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(min
+\family default 
+ 
+\family sans 
+{ nombre }
+\family default 
+ 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: trouve le min entre tout les nombres (éventuellement aucun) passés en
+ paramètres.
+\layout Description
+
+valeur
+\protected_separator 
+de
+\protected_separator 
+retour
+\protected_separator 
+: le min de la suite de nombres; le plus grand entier
+\begin_float footnote 
+\layout Standard
+
+de même, on considère que le plus grand entier est l'élément neutre pour
+ l'opération min.
+\end_float 
+ si aucun paramètre n'est donné; 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ si une erreur est survenue.
+\layout Section
+\pagebreak_top 
+Fonctions d'arité 1 ou plus.
+\layout Subsection
+
+rem
+\begin_inset LatexCommand \index{rem}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(rem 
+\family sans 
+nombre { nombre }
+\family default 
+ 
+\family typewriter 
+)
+\newline 
+( % 
+\family sans 
+nombre {nombre}
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: effectue le reste de la division entière entre le premier nombre et le
+ reste des arguments.
+\layout Description
+
+valeur
+\protected_separator 
+de
+\protected_separator 
+retour
+\protected_separator 
+: reste de toutes les divisions entières ; valeur du premier paramètre si
+ il est seul; 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ si une erreur est survenue.
+\layout Section
+\pagebreak_top 
+Fonctions d'arité exactement unaire
+\layout Subsection
+
+abs
+\begin_inset LatexCommand \index{abs}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(abs
+\family default 
+ 
+\family sans 
+nombre { n'importe quoi }
+\family default 
+ 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: donne la valeur absolue du nombre donné en paramètre, le reste des arguments
+ est ignoré.
+\layout Description
+
+valeur
+\protected_separator 
+de
+\protected_separator 
+retour
+\protected_separator 
+: valeur absolue du nombre entier; 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ si une erreur est survenue.
+\layout Subsection
+\pagebreak_top 
+opp
+\begin_inset LatexCommand \index{opp}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(opp
+\family default 
+ 
+\family sans 
+nombre { n'importe quoi }
+\family default 
+ 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: donne l'opposé du nombre donné en paramètre, le reste des arguments est
+ ignoré.
+\layout Description
+
+valeur
+\protected_separator 
+de
+\protected_separator 
+retour
+\protected_separator 
+: opposé du nombre entier; 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ si une erreur est survenue.
+\layout Subsection
+\pagebreak_top 
+inc
+\begin_inset LatexCommand \index{inc}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{1+}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(inc
+\family default 
+ 
+\family sans 
+nombre { n'importe quoi }
+\family default 
+ 
+\family typewriter 
+)
+\family default 
+
+\newline 
+
+\family typewriter 
+(1+
+\family default 
+ 
+\family sans 
+nombre { n'importe quoi }
+\family default 
+ 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: donne le nombre donné en paramètre additionné de 1, le reste des arguments
+ est ignoré.
+\layout Description
+
+valeur
+\protected_separator 
+de
+\protected_separator 
+retour
+\protected_separator 
+: le nombre + 1; 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ si une erreur est survenue.
+\layout Subsection
+\pagebreak_top 
+dec
+\begin_inset LatexCommand \index{dec}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{1-}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(dec
+\family default 
+ 
+\family sans 
+nombre { n'importe quoi }
+\family default 
+ 
+\family typewriter 
+)
+\family default 
+
+\newline 
+
+\family typewriter 
+(1-
+\family default 
+ 
+\family sans 
+nombre { n'importe quoi }
+\family default 
+ 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: donne le nombre donné en paramètre diminué de 1, le reste des arguments
+ est ignoré.
+\layout Description
+
+valeur
+\protected_separator 
+de
+\protected_separator 
+retour
+\protected_separator 
+: le nombre - 1; 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ si une erreur est survenue.
+\layout Chapter
+
+Fonctions de manipulations de listes
+\begin_inset LatexCommand \index{fonctions sur les listes}
+
+\end_inset 
+
+.
+\layout Standard
+
+Vous trouverez dans ce chapitre les fonctions dont vous avez besoin pour
+ manipuler et construire des listes.
+\layout Standard
+
+Lisp étant un langage fonctionnel, aucune de ces fonctions ne modifie ses
+ arguments.
+\layout Section
+
+Fonctions de consultation de liste.
+\layout Subsection
+
+car
+\begin_inset LatexCommand \index{car}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(car
+\family sans 
+ liste { n'importe quoi }
+\family default 
+ 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: donne le premier élément de la liste passée en paramètre, nil si cette
+ liste est vide.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+2> ( car ()) 
+\newline 
+=nil 
+\newline 
+3> ( car '(a b c)) 
+\newline 
+=a
+\layout Quote
+
+Remarquons qu'on peut se servir de cette fonction pour 
+\begin_inset Quotes eld
+\end_inset 
+
+enlever les parenthèses
+\begin_inset Quotes erd
+\end_inset 
+
+ autour du premier élément d'une liste :
+\family typewriter 
+ ( car '((a.b)) )=(a.b)
+\family default 
+ et 
+\family typewriter 
+( car '(a))=a
+\family default 
+ .
+\layout Subsection
+\pagebreak_top 
+cdr
+\begin_inset LatexCommand \index{cdr}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(cdr
+\family sans 
+ liste { n'importe quoi }
+\family default 
+ 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: donne la liste passée en paramètre privée de son premier élément ou nil
+ si cette liste est vide.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+1>
+\protected_separator 
+ ( cdr ()) 
+\newline 
+=nil 
+\newline 
+2> ( cdr '(a b c))
+\newline 
+=(b c)
+\newline 
+3> ( cdr '( a b))
+\newline 
+=(b)
+\newline 
+4> ( cdr '(a.b))
+\newline 
+=b
+\layout Quote
+
+Remarquons au passage que 
+\family typewriter 
+'(.b) = b
+\family default 
+ , ce qui confirme ce dernier exemple.
+\layout Subsection
+\pagebreak_top 
+last
+\begin_inset LatexCommand \index{last}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(last
+\family sans 
+ liste_NON_VIDE { n'importe quoi }
+\family default 
+ 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: donne la liste passée en paramètre privée de tout ces éléments, sauf le
+ dernier.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+1>
+\protected_separator 
+ ( last '(a b)) 
+\newline 
+=(b) 
+\newline 
+2> ( last '(a b .c )) 
+\newline 
+=(b.c) 
+\newline 
+3> ( last '(a)) 
+\newline 
+=(a)
+\layout Subsection
+\pagebreak_top 
+nth
+\begin_inset LatexCommand \index{nth}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(nth 
+\family sans 
+nombre_POSITIF liste_NON_VIDE { n'importe quoi }
+\family default 
+ 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: donne la liste passée en paramètre amputée de ces éléments jusqu'avant
+ le 
+\begin_inset Quotes eld
+\end_inset 
+
+nombre_positif-ème
+\begin_inset Quotes erd
+\end_inset 
+
+.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+8> ( nth 1 '(a b c)) 
+\newline 
+=(a b c) 
+\newline 
+9> ( nth 78 '(a b c)) 
+\newline 
+=(c) 
+\newline 
+10> ( nth 3 '(a b c d)) 
+\newline 
+=(c d)
+\layout Quote
+
+On voit à la ligne 9 que si le nombre dépasse la taille de la liste, 
+\begin_inset Quotes eld
+\end_inset 
+
+nth
+\begin_inset Quotes erd
+\end_inset 
+
+ est équivalente à 
+\begin_inset Quotes eld
+\end_inset 
+
+last
+\begin_inset Quotes erd
+\end_inset 
+
+.
+\layout Section
+\pagebreak_top 
+Fonctions de construction de listes.
+\layout Subsection
+
+list
+\begin_inset LatexCommand \index{list}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(list 
+\family sans 
+{ n'importe quoi }
+\family default 
+ 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: donne la liste formée de tout les paramètres.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+14> ( list)
+\newline 
+=nil 
+\newline 
+15> (list 'a 42 '(a b)
+\protected_separator 
+ '(e.f))
+\newline 
+=(a 42 (a b) (e.f))
+\layout Quote
+
+On peut aussi se servir de cette fonction pour transformer un atome en une
+ liste à 1 élément : 
+\family typewriter 
+( list 'a )=(a)
+\family default 
+ .
+\layout Quote
+
+Remarquons aussi que
+\family typewriter 
+ ( car ( list 'a))=a
+\family default 
+ .
+\layout Subsection
+\pagebreak_top 
+cons
+\begin_inset LatexCommand \index{cons}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(cons 
+\family sans 
+{ N'importe quoi } N'importe_quoi Liste 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: donne la liste constituée de Liste à laquelle on a ajouté en tête tous
+ les 
+\begin_inset Quotes eld
+\end_inset 
+
+n'importe_quoi
+\begin_inset Quotes erd
+\end_inset 
+
+.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+18> ( cons 'a '(b c))
+\newline 
+=(a b c) 
+\newline 
+19> ( cons 'a nil) 
+\newline 
+=(a) 
+\newline 
+20> ( cons '(a b) '(c d)) 
+\newline 
+=((a b) c d) 
+\layout Subsection
+\pagebreak_top 
+append
+\begin_inset LatexCommand \index{append}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(append 
+\family sans 
+{Liste } 
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: donne la liste constituée de la concaténation de toutes les Listes.
+ Ces listes peuvent être vides.
+ Append sans arguments donne la liste vide.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+1>
+\protected_separator 
+ ( append nil ) 
+\newline 
+=nil 
+\newline 
+2> ( append ) 
+\newline 
+=nil 
+\newline 
+3> ( append '(a b)) 
+\newline 
+=(a b) 
+\newline 
+4> ( append '(a b) '(c d)) 
+\newline 
+=(a b c d) 
+\newline 
+5> ( append nil '(a b) nil) 
+\newline 
+=(a b)
+\layout Chapter
+
+Fonctions booléennes
+\begin_inset LatexCommand \index{fonctions booléennes}
+
+\end_inset 
+
+.
+\layout Standard
+
+Vous trouverez dans ce chapitre une collections de fonctions permettant
+ de faire divers test sur leurs arguments.
+ Ces fonctions renvoient 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ ( voir 
+\begin_inset LatexCommand \ref{sec: symboles speciaux}
+
+\end_inset 
+
+ ) en cas d'échec du test, ou une autre valeur en cas de succès du test.
+\layout Section
+
+Tests d'égalité
+\begin_inset LatexCommand \index{egalité}
+
+\end_inset 
+
+.
+\layout Standard
+
+Lispi propose 2 tests d'égalité d'arité 2 qui acceptent n'importe quel type
+ d'arguments.
+ Vous trouverez le test d'égalité spécifique pour les nombres
+\begin_float footnote 
+\layout Standard
+
+qui est lui d'arité N-aire, avec N >=1
+\end_float 
+ dans la section 
+\begin_inset LatexCommand \ref{sec: test_nombres}
+
+\end_inset 
+
+.
+\layout Subsection
+
+equal
+\begin_inset LatexCommand \index{equal}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(equal
+\family sans 
+ A B 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: A et B peuvents êtres de n'importe quel type.
+\layout Description
+
+description
+\protected_separator 
+: si A et B sont égaux, i.e ce sont les mêmes listes | atomes, equal renvoie
+ A
+\begin_float footnote 
+\layout Standard
+
+ou B, ce qui est la meme chose.
+\end_float 
+ .
+ Si A=B=nil, equal renvoie 
+\begin_inset Quotes eld
+\end_inset 
+
+t
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ Equal renvoie 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ dans tout les autres cas.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+1>
+\protected_separator 
+ ( equal 'a 'a) 
+\newline 
+=a 
+\newline 
+2> ( equal 'a nil) 
+\newline 
+=nil 
+\newline 
+3> ( equal '(a b ) '(a b)) 
+\newline 
+=(a b) 
+\newline 
+4> ( equal 1 2) 
+\newline 
+=nil 
+\newline 
+5> ( equal nil nil) 
+\newline 
+=t
+\layout Subsection
+\pagebreak_top 
+eq
+\begin_inset LatexCommand \index{eq}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(eq
+\family sans 
+ A B 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: A et B peuvents êtres de n'importe quel type.
+\layout Description
+
+description
+\protected_separator 
+: A et B sont décidé égaux au sens de 
+\begin_inset Quotes eld
+\end_inset 
+
+eq
+\begin_inset Quotes erd
+\end_inset 
+
+ ssi ils pointent sur le même emplacement dans la mémoire interne de Lispi.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+13> ( eq 1 1) 
+\newline 
+=nil
+\newline 
+14> ( eq 'a 'a ) 
+\newline 
+=a
+\newline 
+15> ( eq t t) 
+\newline 
+=t 
+\newline 
+16> ( eq nil nil) 
+\newline 
+=t 
+\newline 
+17> ( eq '(a b) '(a b)) 
+\newline 
+=nil
+\layout Section
+\pagebreak_top 
+Tests sur les nombres
+\begin_inset LatexCommand \label{sec: test_nombres}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{tests numériques}
+
+\end_inset 
+
+.
+\layout Standard
+
+Ces fonctions attendent au moins un nombre comme argument.
+\layout Subsection
+
+eqn
+\begin_inset LatexCommand \index{eqn}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{=}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(eqn 
+\family sans 
+N {N} 
+\family typewriter 
+)
+\newline 
+(= 
+\family sans 
+N {N} 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: Les N sont des nombres.
+\layout Description
+
+description
+\protected_separator 
+: renvoie un des nombres si ils sont tous égaux , nil sinon.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+20> ( = 121 121) 
+\newline 
+=121 
+\newline 
+21> ( eq 1 2) 
+\newline 
+=nil 
+\newline 
+22> ( =
+\protected_separator 
+ 1 1 1 1 1) 
+\newline 
+=1
+\layout Subsection
+\pagebreak_top 
+lt (lower than)
+\begin_inset LatexCommand \index{lt}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{<}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(lt 
+\family sans 
+N {N} 
+\family typewriter 
+)
+\newline 
+(< 
+\family sans 
+N {N} 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: Les N sont des nombres.
+\layout Description
+
+description
+\protected_separator 
+: vérifie si la suite des N est strictement croissante.
+ Renvoie le plus petit nombre
+\begin_float footnote 
+\layout Standard
+
+necessairement le premier
+\end_float 
+ si oui, nil sinon.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+23> ( < 1 3 9) 
+\newline 
+=1 
+\newline 
+24> ( < 5 2) 
+\newline 
+=nil
+\layout Subsection
+\pagebreak_top 
+le (lower or equal)
+\begin_inset LatexCommand \index{le}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{<=}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(le 
+\family sans 
+N {N} 
+\family typewriter 
+)
+\newline 
+(<= 
+\family sans 
+N {N} 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: Les N sont des nombres.
+\layout Description
+
+description
+\protected_separator 
+: vérifie si la suite des N est croissante.
+ Renvoie le plus petit nombre
+\begin_float footnote 
+\layout Standard
+
+necessairement le premier
+\end_float 
+ si oui, nil sinon.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+25> ( <= 1 1 2)
+\layout Quote
+
+
+\family typewriter 
+=1 
+\newline 
+26> ( <= 2 1) 
+\newline 
+=nil
+\layout Subsection
+\pagebreak_top 
+gt (greater than)
+\begin_inset LatexCommand \index{gt}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{>}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(gt 
+\family sans 
+N {N} 
+\family typewriter 
+)
+\newline 
+(> 
+\family sans 
+N {N} 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: Les N sont des nombres.
+\layout Description
+
+description
+\protected_separator 
+: vérifie si la suite des N est strictement décroissante.
+ Renvoie le plus petit grand nombre
+\begin_float footnote 
+\layout Standard
+
+necessairement le premier
+\end_float 
+ si oui, nil sinon.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+27> ( > 4 2 1) 
+\newline 
+=4 
+\newline 
+28> ( gt 1 4) 
+\newline 
+=nil 
+\layout Subsection
+\pagebreak_top 
+ge (greater or equal)
+\begin_inset LatexCommand \index{ge}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{>=}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(ge 
+\family sans 
+N {N} 
+\family typewriter 
+)
+\newline 
+(>= 
+\family sans 
+N {N} 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: Les N sont des nombres.
+\layout Description
+
+description
+\protected_separator 
+: vérifie si la suite des N est décroissante.
+ Renvoie le plus petit grand nombre
+\begin_float footnote 
+\layout Standard
+
+necessairement le premier
+\end_float 
+ si oui, nil sinon.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+30> ( >= 4 4 1) 
+\newline 
+=4 
+\newline 
+31> ( >= 4 45) 
+\newline 
+=nil
+\layout Section
+\pagebreak_top 
+Tests d'identification des objets
+\begin_inset LatexCommand \index{test de type}
+
+\end_inset 
+
+.
+\layout Standard
+
+Toutes ces fonctions sont unaires.
+\layout Standard
+
+Ces fonctions vous permettent de tester l'appartenance de leur argument
+ à un des types d'objets que peut manipuler Lispi.
+ Elle sont surtout utiles à l'intérieur des fonctions définies par l'utilisateur
+ (voir 
+\begin_inset LatexCommand \ref{sec: fonctions utilisateur}
+
+\end_inset 
+
+)pour le contrôle de leurs arguments.
+\layout Subsection
+
+numbp
+\begin_inset LatexCommand \index{numbp}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(numbp 
+\family sans 
+A 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: A peut être n'importe quoi.
+\layout Description
+
+description
+\protected_separator 
+: Renvoie A si c'est un nombre (voir 
+\begin_inset LatexCommand \ref{sec: nombre}
+
+\end_inset 
+
+), nil sinon.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+34> ( numbp 5) 
+\newline 
+=5 
+\newline 
+35> ( numbp '(1 2)) 
+\newline 
+=nil 
+\newline 
+36> ( numbp t) 
+\newline 
+=nil 
+\layout Subsection
+\pagebreak_top 
+symbp
+\begin_inset LatexCommand \index{symbp}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(symbp 
+\family sans 
+A 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: A peut être n'importe quoi.
+\layout Description
+
+description
+\protected_separator 
+: Renvoie A si c'est un symbole (voir 
+\begin_inset LatexCommand \ref{sec: symbole}
+
+\end_inset 
+
+), 
+\family typewriter 
+
+\begin_inset Quotes eld
+\end_inset 
+
+t
+\begin_inset Quotes erd
+\end_inset 
+
+
+\family default 
+ si ce symbole est 
+\family typewriter 
+
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+
+\family default 
+ , nil sinon.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+37> ( symbp nil) 
+\newline 
+=t 
+\newline 
+38> ( symbp 'abc) 
+\newline 
+=abc 
+\newline 
+39> ( symbp 45) 
+\newline 
+=nil
+\layout Quote
+
+On remarque que (symbp nil)=t .
+ En effet, symbp ne peut renvoyer ce symbole 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ en tant que valeur 
+\begin_inset Quotes eld
+\end_inset 
+
+vraie
+\begin_inset Quotes erd
+\end_inset 
+
+.
+\layout Subsection
+\pagebreak_top 
+atomp
+\begin_inset LatexCommand \index{atomp}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(atomp 
+\family sans 
+A 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: A peut être n'importe quoi.
+\layout Description
+
+description
+\protected_separator 
+: Renvoie A si c'est un atome (voir 
+\begin_inset LatexCommand \ref{sec: atome}
+
+\end_inset 
+
+), 
+\family typewriter 
+
+\begin_inset Quotes eld
+\end_inset 
+
+t
+\begin_inset Quotes erd
+\end_inset 
+
+
+\family default 
+ si cet atome est 
+\family typewriter 
+
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+
+\family default 
+ , nil sinon.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+45> ( atomp 45) 
+\newline 
+=45 
+\newline 
+46> ( atomp nil) 
+\newline 
+=t 
+\newline 
+47> ( atomp 'abc) 
+\newline 
+=abc 
+\newline 
+48> ( atomp '(abc)) 
+\newline 
+=nil
+\layout Subsection
+\pagebreak_top 
+listp
+\begin_inset LatexCommand \index{listp}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(listp 
+\family sans 
+A 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: A peut être n'importe quoi.
+\layout Description
+
+description
+\protected_separator 
+: Renvoie A si c'est une liste (voir 
+\begin_inset LatexCommand \ref{sec: liste}
+
+\end_inset 
+
+), 
+\family typewriter 
+
+\begin_inset Quotes eld
+\end_inset 
+
+t
+\begin_inset Quotes erd
+\end_inset 
+
+
+\family default 
+ si cette liste est 
+\family typewriter 
+
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+
+\family default 
+ , nil sinon.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+49> ( listp 'a) 
+\newline 
+=nil 
+\newline 
+50> ( listp nil) 
+\newline 
+=t 
+\newline 
+51> ( listp '(a b c)) 
+\newline 
+=(a b c)
+\layout Subsection
+\pagebreak_top 
+nullp (ou not)
+\begin_inset LatexCommand \index{nullp}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{not}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(nullp 
+\family sans 
+A 
+\family typewriter 
+)
+\newline 
+(not 
+\family sans 
+A 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: A peut être n'importe quoi.
+\layout Description
+
+description
+\protected_separator 
+: Renvoie 
+\family typewriter 
+
+\begin_inset Quotes eld
+\end_inset 
+
+t
+\begin_inset Quotes erd
+\end_inset 
+
+
+\family default 
+ si A==nil (voir 
+\begin_inset LatexCommand \ref{sec: symboles speciaux}
+
+\end_inset 
+
+), et 
+\family typewriter 
+
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+
+\family default 
+ sinon.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+8> ( nullp 'a) 
+\newline 
+=nil 
+\newline 
+9> ( equal (nullp nil) (nullp ())) 
+\newline 
+=t 
+\newline 
+10> (nullp t) 
+\newline 
+=nil 
+\newline 
+11> ( not t) 
+\newline 
+=nil 
+\newline 
+12> ( not (nullp nil)) 
+\newline 
+=nil
+\layout Chapter
+
+Structures de contrôle
+\begin_inset LatexCommand \index{structures de contrôle}
+
+\end_inset 
+
+.
+\layout Standard
+
+On trouve dans Lispi les structures de contrôles classiques pour les langages
+ de programmation.
+ Ces structures de contrôle se présentent, comme tout en Lispi sous forme
+ de fonctions.
+ De manière générale, ces fonctions décident ou non de l'évaluation de leurs
+ arguments en fonction de la valeur d'un ou plusieurs prédicat.
+ Elles renvoient ( sauf pour prog1 ) la valeur de la dernière phrase évaluée.
+\layout Section
+
+prog
+\begin_inset LatexCommand \index{prog}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(prog
+\family sans 
+ Phrase { Phrases } 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: Les phrases sont des phrases Lisp correctes.
+\layout Description
+
+description
+\protected_separator 
+: Évalue en séquence les phrases et renvoie la valeur de l'évaluation de
+ la dernière.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+12> ( prog (add 1 1) 2 (mul 3 3) (not nil)) 
+\newline 
+=t
+\layout Section
+\pagebreak_top 
+prog1
+\begin_inset LatexCommand \index{prog1}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(prog1
+\family sans 
+ Phrase { Phrases } 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: Les phrases sont des phrases Lisp correctes.
+\layout Description
+
+description
+\protected_separator 
+: Évalue en séquence les phrases et renvoie la valeur de l'évaluation de
+ la première.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+13> ( prog1 (add 1 1) 2 (mul 3 3) (not nil))
+\layout Quote
+
+
+\family typewriter 
+=2
+\layout Section
+\pagebreak_top 
+and
+\begin_inset LatexCommand \index{and}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(and
+\family sans 
+ Phrase { Phrases } 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: Les phrases sont des phrases Lisp correctes.
+\layout Description
+
+description
+\protected_separator 
+: Évalue en séquence les phrases jusqu'à ce qu'il n'y en ai plus ou jusqu'à
+ ce que l'une d'elle soit fausse.
+ Renvoie la valeur de l'évaluation de la dernière phrase évaluée.
+ Remarquons que ce 
+\begin_inset Quotes eld
+\end_inset 
+
+et
+\begin_inset Quotes erd
+\end_inset 
+
+ n'est pas un 
+\begin_inset Quotes eld
+\end_inset 
+
+et
+\begin_inset Quotes erd
+\end_inset 
+
+ logique, car l'évaluation des arguments s'arrête dès que l'une des phrases
+ est fausse.
+ On peut le rapprocher du 
+\begin_inset Quotes eld
+\end_inset 
+
+&&
+\begin_inset Quotes erd
+\end_inset 
+
+ en C, et du 
+\begin_inset Quotes eld
+\end_inset 
+
+and then
+\begin_inset Quotes erd
+\end_inset 
+
+ en Ada.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+15> ( and (add 1 1) nil) 
+\newline 
+=nil 
+\newline 
+16> ( and (add 1 1) '(a b c)) 
+\newline 
+=(a b c)
+\layout Section
+\pagebreak_top 
+or
+\begin_inset LatexCommand \index{or}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(or
+\family sans 
+ Phrase { Phrases } 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: Les phrases sont des phrases Lisp correctes.
+\layout Description
+
+description
+\protected_separator 
+: Évalue en séquence les phrases jusqu'à ce qu'il n'y en ai plus ou jusqu'à
+ ce que l'une d'elle soit vraie.
+ Renvoie la valeur de l'évaluation de la dernière phrase évaluée.
+ Ce 
+\begin_inset Quotes eld
+\end_inset 
+
+or
+\begin_inset Quotes erd
+\end_inset 
+
+ n'est pas un 
+\begin_inset Quotes eld
+\end_inset 
+
+or
+\begin_inset Quotes erd
+\end_inset 
+
+ logique, car l'évaluation des arguments s'arrête dès que l'une des phrase
+ est vraie.
+ On peut le rapprocher du 
+\begin_inset Quotes eld
+\end_inset 
+
+||
+\begin_inset Quotes erd
+\end_inset 
+
+ en C ou du 
+\begin_inset Quotes eld
+\end_inset 
+
+or else
+\begin_inset Quotes erd
+\end_inset 
+
+ en Ada.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+25> ( or (nullp nil) (not (nullp nil))) 
+\newline 
+=t 
+\newline 
+26> ( or nil nil nil 1 2) 
+\newline 
+=1
+\layout Quote
+
+On voit sur cet exemple que la dernière phrase évaluée est 
+\begin_inset Quotes eld
+\end_inset 
+
+1
+\begin_inset Quotes erd
+\end_inset 
+
+ et non pas 
+\begin_inset Quotes eld
+\end_inset 
+
+2
+\begin_inset Quotes erd
+\end_inset 
+
+.
+\layout Section
+\pagebreak_top 
+if
+\begin_inset LatexCommand \index{if}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(if
+\family sans 
+ Prédicat { Phrases } 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: Le prédicat et les phrases sont des phrases Lisp correctes.
+\layout Description
+
+description
+\protected_separator 
+: Évalue le prédicat.
+ Si celui-ci est vrai, évalue la première phrase, sinon, évalue la suite
+ des phrases sauf la première.
+ Renvoie la valeur de la dernière phrase évaluée, nil si aucune phrase n'est
+ évaluée.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+31> (if t) 
+\newline 
+=nil 
+\newline 
+32> (if t 1 2 3) 
+\newline 
+=1 
+\newline 
+33> (if nil 1 2 3) 
+\newline 
+=3 
+\newline 
+34> (if t) 
+\newline 
+=nil 
+\newline 
+35> (if nil 1) 
+\newline 
+=nil 
+\newline 
+36> ( if nil) 
+\newline 
+=nil
+\newline 
+37> (set 'x 0) 
+\newline 
+=0 
+\newline 
+38> (if (= x 0) 'zero 'non_nul) 
+\newline 
+=zero
+\layout Quote
+
+Les exemples 31, 35 et 36 montrent le comportement de cette fonction lorsque
+ l'évaluation du prédicat impose de ne rien évaluer.
+\layout Section
+\pagebreak_top 
+cond
+\begin_inset LatexCommand \index{cond}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(cond (
+\family sans 
+ Prédicat {Phrases}
+\family typewriter 
+ ) 
+\family sans 
+{ 
+\family typewriter 
+( 
+\family sans 
+Prédicat { Phrases}
+\family typewriter 
+ ) 
+\family sans 
+}
+\family typewriter 
+ )
+\layout Description
+
+arguments
+\protected_separator 
+: Les Prédicats et les Phrases sont des phrases Lisp correctes.
+\layout Description
+
+description
+\protected_separator 
+: Évalue en séquences les phrases correspondantes au premier prédicat Vrai.
+ Renvoie l'évaluation de la dernière phrase évaluée, et 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ si il n'y à rien à évaluer, c'est à dire s'il n'y a pas de prédicat vrai,
+ ou si la suite de phrase correspondante au premier prédicat vrai est vide.
+\layout Description
+
+exemples
+\protected_separator 
+: 
+\layout Quote
+
+
+\family typewriter 
+45> ( cond (nil 1) (nil 2)) 
+\newline 
+=nil 
+\newline 
+
+\protected_separator 
+46> (cond (t 1) (nil 2)) 
+\newline 
+=1 
+\newline 
+47> ( cond (t)) 
+\newline 
+=nil 
+\newline 
+48> ( cond (nil 1) (t)) 
+\newline 
+=nil 
+\newline 
+49> (set 'x 2) 
+\newline 
+=2 
+\newline 
+52> ( cond ( (= x 1) 'unite) (t 'autre)) 
+\newline 
+=autre
+\layout Quote
+
+On voit sur les exemples 45, 47 et 48 que cond renvoie 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ lorsqu'il n'y a rien à évaluer d'après les valeurs des prédicats.
+\layout Section
+\pagebreak_top 
+while
+\begin_inset LatexCommand \index{while}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(while
+\family sans 
+ Prédicat { Phrases } 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: Le prédicat et les phrases sont des phrases Lisp correctes.
+\layout Description
+
+description
+\protected_separator 
+: Évalue en séquence les phrases tant que le prédicat est vrai.
+ Attention aux boucles infinies !! (voir la section 
+\begin_inset LatexCommand \ref{sec: arret violent}
+
+\end_inset 
+
+ pour vous en sortir).
+ Renvoie la valeur de la dernière phrase évaluée, ou nil si rien n'est à
+ évaluer.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+1>
+\protected_separator 
+ ( set ' x 0) 
+\newline 
+=0 
+\newline 
+2> ( while (not (= 1000 (set 'x (1+ x)) ) ) ) 
+\newline 
+=nil 
+\newline 
+6> x 
+\newline 
+=1000 
+\newline 
+7> ( while
+\protected_separator 
+ (not (equal x 100000)) (set 'x (1+ x)) ) 
+\newline 
+=100000
+\layout Quote
+
+On voit sur l'exemple 2 que le corps de la boucle peut être vide.
+\layout Section
+\pagebreak_top 
+repeat
+\begin_inset LatexCommand \index{repeat}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(repeat
+\family sans 
+ Nombre { Phrases } 
+\family typewriter 
+)
+\layout Description
+
+arguments
+\protected_separator 
+: Nombre doit être une phrase Lisp dont l'évaluation est un Nombre.
+ Les Phrases sont des phrases Lisp correctes.
+\layout Description
+
+description
+\protected_separator 
+: Repeat évalue Nombre fois la séquences des phrases et renvoie le résultat
+ de l'évaluation de la dernière phrase.
+ Repeat renvoie 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ si aucune phrase présente.
+\layout Description
+
+exemples
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+3> ( repeat 1000) 
+\newline 
+=nil 
+\newline 
+4> ( repeat 10000 ( add 1 2)) 
+\newline 
+=3 
+\newline 
+5> ( repeat 10000 ( repeat 100 ( add 1 1))) 
+\newline 
+=2
+\layout Quote
+
+On voitsur l'exemple 3 que repeat renvoie 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ si aucune phrase n'est donnée à évaluer.
+\layout Chapter
+
+Définition de variables
+\begin_inset LatexCommand \index{variables}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{definition de variable}
+
+\end_inset 
+
+.
+\layout Standard
+
+Comme tout langage, LISP permet de définir des variables utilisateurs.
+ Lisp est non typé, ce qui signifie que vous pouvez affecter n'importe quoi
+ à une variable.
+ La définition et la modification d'une variable se font grâce à la fonction
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+set
+\begin_inset Quotes erd
+\end_inset 
+
+
+\begin_inset LatexCommand \index{set}
+
+\end_inset 
+
+ dont voici le synopsis :
+\newline 
+
+\family typewriter 
+( set '
+\family sans 
+nom valeur
+\family typewriter 
+)
+\layout Standard
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+nom
+\begin_inset Quotes erd
+\end_inset 
+
+ doit être un symbole non-réservé (voir 
+\begin_inset LatexCommand \ref{sec: symboles speciaux}
+
+\end_inset 
+
+ ).
+\layout Standard
+
+Vous remarquez que 
+\begin_inset Quotes eld
+\end_inset 
+
+nom
+\begin_inset Quotes erd
+\end_inset 
+
+ doit être quoté (voir 
+\begin_inset LatexCommand \ref{sec: symboles speciaux}
+
+\end_inset 
+
+).
+\layout Standard
+
+Lorsqu'on est dans l'environnement initial, la fonction set crée et modifie
+ une variable globale, qui peut donc être consultée et modifiée par les
+ fonctions utilisateurs.
+\layout Quote
+
+
+\family typewriter 
+8> ( set 'x 0) 
+\newline 
+=0 
+\newline 
+9> ( de foo1() ( add x 1)) 
+\newline 
+=foo1 
+\newline 
+10> ( foo1) 
+\newline 
+=1 
+\newline 
+11> ( de foo2() (set 'x 'autre_chose)) 
+\newline 
+=foo2 
+\newline 
+12> ( foo2) 
+\newline 
+=autre_chose 
+\newline 
+13> x 
+\newline 
+=autre_chose
+\layout Standard
+
+On voit que si dans une fonction utilisateur (voir 
+\begin_inset LatexCommand \ref{sec: fonctions utilisateur}
+
+\end_inset 
+
+), on fait un 
+\begin_inset Quotes eld
+\end_inset 
+
+set
+\begin_inset Quotes erd
+\end_inset 
+
+ d'une variable existant avant son appel, cette variable est considérée
+ globale par cette fonction.
+ Ceci est gênant si on imagine que fatalement, on aura un jour ou l'autre
+ une fonction qui modifiera une de nos variables globale.
+ On imagine aussi que pour des fonctions récursives, l'utilisation de variables
+ locale est interdite.
+ 
+\layout Section
+
+Variables locales dans les fonctions utilisateur.
+\layout Standard
+
+Si vous avez besoin d'une variable strictement locale dans une fonction
+\begin_inset LatexCommand \index{variable locale}
+
+\end_inset 
+
+, nous vous recommandons la technique suivante :
+\layout Standard
+
+Définissez la variable locale dans les paramètres formels de la fonction,
+ et faite un premier 
+\begin_inset Quotes eld
+\end_inset 
+
+set
+\begin_inset Quotes erd
+\end_inset 
+
+ au début de la fonction pour l'initialiser correctement.
+ A l'utilisation, appelez la fonction avec 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ ou n'importe quoi comme paramètre effectif correspondant à cette variable.
+ Exemple :
+\layout Quote
+
+
+\family typewriter 
+1>
+\protected_separator 
+ ( de foo(vloc) ( set 'vloc 0) ( repeat 10 (set 'vloc (1+ vloc)) ) )
+\newline 
+=foo 
+\newline 
+4> ( foo nil) 
+\newline 
+=10
+\layout Quote
+
+
+\family typewriter 
+5> ( de foo(x) ( set 'x 0) ( repeat 10 ( set 'x (1+ x)))) 
+\newline 
+=foo 
+\newline 
+6> ( set 'x 'cette_valeur ) 
+\newline 
+=cette_valeur 
+\newline 
+7> ( foo nil) 
+\newline 
+=10 
+\newline 
+8> x 
+\newline 
+=cette_valeur 
+\layout Standard
+
+Voici un autre exemple de l'utilisation de cette technique pour cacher à
+ l'utilisateur l'utilisation de variables locales.
+ Nous pouvons redéfinir la fonction qui donne le i-ème terme de la suite
+ de fibonacci
+\begin_inset LatexCommand \index{fibonacci}
+
+\end_inset 
+
+ pour qu'elle soit plus performante que la fonction donnée au chapitre 
+\begin_inset LatexCommand \ref{sec: arret violent}
+
+\end_inset 
+
+ :
+\layout Quote
+
+
+\family typewriter 
+; Exemple d'utilisation de variables locales 
+\newline 
+( de fibo(i) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+ ( de sous_fibo(a b tmp) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ( set 'a (set 'b 1)) ;initialisation des parametres 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ( repeat (- i 2) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ( set 'tmp (+ a b))
+\protected_separator 
+ ; calcul et decalage des termes 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ( set 'a b) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ( set 'b tmp) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ tmp ; le renvoi du resultat 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+ ) 
+\newline 
+
+\protected_separator 
+; le code principal de fibo 
+\newline 
+
+\protected_separator 
+ ( if (<= i 2) 1 (sous_fibo nil nil nil)) 
+\newline 
+)
+\layout Quote
+
+On peut maintenant appeler cette fonction comme au chapitre 
+\begin_inset LatexCommand \ref{sec: arret violent}
+
+\end_inset 
+
+.
+ La modification est invisible à l'utilisation.
+\layout Chapter
+
+Définition de nouvelles fonctions
+\begin_inset LatexCommand \index{fonctions utilisateur}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \label{sec: fonctions utilisateur}
+
+\end_inset 
+
+.
+\layout Standard
+
+Comme tout langage de programmation, LISP permet de définir de nouvelles
+ fonctions.
+ La définition se d'une nouvelle fonction se fait grâce à une fonction (
+ LISP est un langage fonctionnel ) nommée 
+\begin_inset Quotes eld
+\end_inset 
+
+de
+\begin_inset Quotes erd
+\end_inset 
+
+ 
+\begin_inset LatexCommand \index{de}
+
+\end_inset 
+
+( comme 
+\begin_inset Quotes eld
+\end_inset 
+
+define
+\begin_inset Quotes erd
+\end_inset 
+
+ ).
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+de
+\begin_inset Quotes erd
+\end_inset 
+
+ renvoie le nom de la fonction nouvellement définie.
+\layout Standard
+
+Le synopsis de cette fonction est très simple :
+\layout Standard
+
+
+\family typewriter 
+( de
+\family default 
+ 
+\family sans 
+nom liste corps
+\family typewriter 
+ )
+\layout Description
+
+nom
+\protected_separator 
+: doit être un symbole non réservé ( voir 
+\begin_inset LatexCommand \ref{sec: symboles speciaux}
+
+\end_inset 
+
+ ).
+\layout Description
+
+liste
+\protected_separator 
+: c'est la liste des paramètres formels de la fonction.
+ Ce doit être une liste de symboles non-réservés, éventuellement vide.
+ On ne peut pas explicitement imposer un contrôle de type par l'évaluateur
+ sur ces paramètres.
+\layout Description
+
+corps
+\protected_separator 
+: c'est une suite de phrases ( voir 
+\begin_inset LatexCommand \ref{sec: liste}
+
+\end_inset 
+
+) évaluables.
+ Cette suite peut être éventuellement réduite à 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+.
+\layout Standard
+
+On peut ensuite appeler cette fonction comme n'importe quelle autre fonction
+ prédéfinie.
+ La valeur de retour de cette fonction est la valeur de la dernière phrase
+ du corps évaluée.
+\layout Description
+
+Attention
+\protected_separator 
+: comme LISP est un langage non-typé, l'interpréteur vérifie seulement que
+ le nombre d'arguments à l'appel est correct
+\begin_float footnote 
+\layout Standard
+
+c'est à dire égal ou supérieur au nombre d'arguments demandés par la fonction,
+ les arguments en trop étant ignorés.
+\end_float 
+, mais ne vérifie pas leur type.
+\layout Standard
+
+Quelques exemples :
+\layout Quote
+
+
+\family typewriter 
+1>
+\protected_separator 
+ ( de rien() ()) 
+\newline 
+=rien 
+\newline 
+2> (rien) 
+\newline 
+=nil
+\family default 
+
+\newline 
+
+\family typewriter 
+3> ( rien 'a 'b 12) 
+\newline 
+=nil
+\layout Quote
+
+rien ne fait rien.
+\layout Quote
+
+
+\family typewriter 
+4> ( de carre(x) (* x x)) 
+\newline 
+=carre 
+\newline 
+5> ( carre ) 
+\newline 
+
+\protected_separator 
+!!ERREUR pas assez d'arguments 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+ dans l'appel de carre 
+\newline 
+=nil 
+\newline 
+6> ( carre 'a) 
+\newline 
+
+\protected_separator 
+!! ERREUR dans mul, nombre attendu 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+ dans l'appel de * 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+ dans l'appel de carre 
+\newline 
+=nil 
+\newline 
+7> ( carre 6) 
+\newline 
+=36
+\layout Quote
+
+On voit sur cet exemple l'utilisation des paramètres formels.
+ On voit aussi que l'évaluateur contrôle le nombre d'arguments, mais pas
+ leur type.
+ La fonction doit contrôler le type de ses arguments elle-même.
+\layout Quote
+
+LISP étant un langage récursif, on peut bien sur définir des fonctions récursive
+s, par exemple, définissons la fonction qui donne le cardinal d'une liste,
+ considérée comme un ensemble.
+ La fonction renvoie nil en cas d'erreur sur l'argument :
+\layout Quote
+
+
+\family typewriter 
+1>
+\protected_separator 
+ ( de cardinal(e) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ( cond 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ (
+\protected_separator 
+ (not (listp e)) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ nil
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ; cas ou l'argument n'est pas une liste 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ( (nullp e) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ 0
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ; cas de la liste vide 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ( t 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ (add 1 (cardinal (cdr e))) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ; la recursivité est ici !! 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ) 
+\newline 
+
+\protected_separator 
+) 
+\newline 
+=cardinal 
+\newline 
+15> ( cardinal 'u) 
+\newline 
+=nil 
+\newline 
+16> ( cardinal nil) 
+\newline 
+=0 
+\newline 
+17> ( cardinal '(a b c)) 
+\newline 
+=3 
+\newline 
+18> ( cardinal '(a)) 
+\newline 
+=1
+\layout Quote
+
+Attention, si vous définissez des fonctions récursives et que vous les appelez
+ de telle sorte qu'elles s'enfoncent trop dans leurs niveaux de recursivité,
+ vous risquez de saturer la mémoire de LISPI et de provoquer un arrêt violent
+ du programme (voir 
+\begin_inset LatexCommand \ref{sec: arret violent}
+
+\end_inset 
+
+).
+\layout Chapter
+
+Gestion de la mémoire de Lispi.
+\layout Standard
+
+Lispi contient un garbage-collector
+\begin_float footnote 
+\layout Standard
+
+
+\begin_inset Quotes eld
+\end_inset 
+
+recuperateur de déchet
+\begin_inset Quotes erd
+\end_inset 
+
+
+\end_float 
+ qui nettoie régulièrement sa mémoire interne.
+ Normalement, à part pour les cas ou vous saturez la mémoire par erreur
+ ( voir chapitre 
+\begin_inset LatexCommand \ref{sec: arret violent}
+
+\end_inset 
+
+ ) vous ne devriez pas vous soucier de ce chapitre.
+ Cependant, voici quelques fonctions qui vous permettrons de vous amuser
+ avec la mémoire de Lispi.
+\layout Section
+
+gc
+\begin_inset LatexCommand \index{gc}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(gc)
+\layout Description
+
+description
+\protected_separator 
+: Force le déclenchement du garbage collector.
+ Cette fonction retourne un couple dont le premier élément est le nombre
+ de cellule mémoire libre dans Lispi, et dont le second élément est le nombre
+ d'emplacement encore libre pour la définition de nouveaux symboles (variables
+ et fonctions).
+\layout Description
+
+exemple
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+2> ( gc) 
+\newline 
+=(4816.423) 
+\newline 
+
+\protected_separator 
+3> ( fibo 10) 
+\newline 
+=55 
+\newline 
+
+\protected_separator 
+4> (gc) 
+\newline 
+=(4816.423)
+\layout Quote
+
+Comme on le voit sur cet exemple, les valeurs retournées par (gc) doivent
+ être identiques entre 2 appels lorsque l'environnement n'a pas changé.
+\layout Section
+\pagebreak_top 
+gcinfo
+\begin_inset LatexCommand \index{gcinfo}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(gcinfo)
+\layout Description
+
+description
+\protected_separator 
+: Cette fonction retourne un couple dont le premier élément est le nombre
+ de cellule mémoire libre dans Lispi, et dont le second élément est le nombre
+ d'emplacement encore libre pour la définition de nouveaux symboles (variables
+ et fonctions).
+\layout Description
+
+exemple
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+6> (gcinfo) 
+\newline 
+=(4921.430) 
+\newline 
+7> (gcinfo) 
+\newline 
+=(4917.430)
+\layout Quote
+
+Comme on le voit sur cet exemple, le nombre de cellules mémoire libres diminue
+ entre chaque appel de la fonction.
+ C'est parce que l'évaluation d'une phrase Lisp demande une quantité de
+ mémoire.
+\layout Section
+\pagebreak_top 
+env
+\begin_inset LatexCommand \index{env}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(env)
+\layout Description
+
+description
+\protected_separator 
+: Cette fonction retourne la liste formant votre environnement courant.
+ Vous trouvez dans cette liste tout vos variables globales ainsi que toute
+ les définitions de fonctions utilisateur.
+\layout Description
+
+exemple
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+8> (env) 
+\newline 
+=((t.t) (nil))
+\layout Quote
+
+Au début de votre session de travail, votre environnement est réduit à 
+\begin_inset Quotes eld
+\end_inset 
+
+t
+\begin_inset Quotes erd
+\end_inset 
+
+ et 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+.
+\layout Section
+\pagebreak_top 
+oblist
+\begin_inset LatexCommand \index{oblist}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(oblist)
+\layout Description
+
+description
+\protected_separator 
+: Cette fonction retourne la liste des symboles utiles de votre session
+ de travail.
+ Vous y trouvez notamment toutes les fonctions primitives décrites dans
+ ce manuel.
+\layout Description
+
+exemple
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+11> (oblist) 
+\newline 
+=(error de cond repeat while if or and prog1 prog oblist env gcinfo gc load
+ eval 
+\backslash 
+n crlf space print prin read set equal eq listp not nullp atomp symbp numbp
+ = eqn >= ge <= le > gt < lt list append cons last nth cdr car 1- dec 1+
+ inc opp abs min max % rem / div * mul - sub + add lambda t quote nil)
+\layout Chapter
+
+Entrées / Sorties
+\begin_inset LatexCommand \index{entree}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{sorties}
+
+\end_inset 
+
+.
+\layout Standard
+
+Lispi dispose des fonctions primitives suivantes permettant de faire des
+ entrées sorties.
+\layout Section
+
+space
+\begin_inset LatexCommand \index{space}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+( space )
+\layout Description
+
+description
+\protected_separator 
+: Imprime un espace à l'écran et retourne vrai.
+\layout Description
+
+exemple
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+7> ( space)
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+=t
+\layout Section
+\pagebreak_top 
+crlf 
+\begin_inset LatexCommand \index{crlf}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+( crlf )
+\newline 
+( 
+\backslash 
+n )
+\layout Description
+
+description
+\protected_separator 
+: Imprime un retour chariot à l'écran et retourne vrai.
+\layout Description
+
+exemple
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+8> ( crlf)
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\layout Quote
+
+
+\family typewriter 
+=t
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\layout Quote
+
+
+\family typewriter 
+9> (
+\backslash 
+n)
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\layout Quote
+
+
+\family typewriter 
+=t
+\layout Section
+\pagebreak_top 
+prin
+\begin_inset LatexCommand \index{prin}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+( prin 
+\family sans 
+{ Phrases }
+\family typewriter 
+ )
+\layout Description
+
+description
+\protected_separator 
+: Imprime les phrases à l'écran, sans retour chariot final ni espaces entre
+ les phrases et retourne vrai.
+\layout Description
+
+exemple
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+11> (prin '(a b c))
+\layout Quote
+
+
+\family typewriter 
+(a b c)=t
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\layout Quote
+
+
+\family typewriter 
+12> ( prin '(a b) '(c d))
+\layout Quote
+
+
+\family typewriter 
+(a b)(c d)=t
+\layout Section
+\pagebreak_top 
+print
+\begin_inset LatexCommand \index{print}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+( print 
+\family sans 
+{ Phrases }
+\family typewriter 
+ )
+\layout Description
+
+description
+\protected_separator 
+: Imprime les phrases à l'écran, sans espaces entre les phrases, termine
+ par un retour-chariot et retourne vrai.
+\layout Description
+
+exemple
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+13> ( print) 
+\newline 
+
+\newline 
+=t 
+\newline 
+14> ( print '(a b) '(c d)) 
+\newline 
+(a b)(c d) 
+\newline 
+=t 
+\layout Section
+\pagebreak_top 
+read
+\begin_inset LatexCommand \index{read}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(read)
+\layout Description
+
+description
+\protected_separator 
+: Attend la frappe d'une phrase Lisp sur l'entrée courante et retourne cette
+ phrase.
+\layout Description
+
+exemple
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+15> (read) 
+\newline 
+'(a b c) 
+\newline 
+='(a b c) 
+\newline 
+17> ( read ) 
+\newline 
+(add 1 1) 
+\newline 
+=(add 1 1) 
+\newline 
+19> ( read ) 
+\newline 
+2 
+\newline 
+=2
+\layout Section
+\pagebreak_top 
+load
+\begin_inset LatexCommand \index{load}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(load 
+\family sans 
+NOM_FICHIER
+\family typewriter 
+)
+\layout Description
+
+argument
+\protected_separator 
+: NOM_FICHIER doit être une phrase Lisp dont l'évaluation renvoie un symbole.
+\layout Description
+
+description
+\protected_separator 
+: Charge le fichier de nom NOM_FICHIER comme si l'utilisateur tapait les
+ phrases de ce fichier interactivement.
+ Renvoie vrai si aucune erreur n'est survenue, et 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+ à la première erreur.
+\layout Description
+
+avertissement
+\protected_separator 
+: Comme vous pouvez bien sur faire des (load 'foo) dans un fichier, il se
+ peut que vous fassiez des inclusions récursives infinies.
+ Ce cas de figure n'est pas traité par Lispi, et c'est à vous de faire attention.
+ Si cela arrive, le programme s'arrête brutalement pour cause de saturation
+ de sa mémoire (voir 
+\begin_inset LatexCommand \ref{sec: arret violent}
+
+\end_inset 
+
+).
+\layout Description
+
+exemple
+\protected_separator 
+:
+\layout Standard
+
+Soit un fichier 
+\begin_inset Quotes eld
+\end_inset 
+
+fensemble
+\begin_inset Quotes erd
+\end_inset 
+
+ :
+\layout Quote
+
+
+\family typewriter 
+; Fonctions sur les ensemble
+\layout Quote
+
+
+\family typewriter 
+( de card(e)
+\protected_separator 
+ ; le cardinal évidemment
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ ( cond
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ (
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ( not ( listp e)) ; verifions que e est une liste
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ( print '!!ERREUR_argument_doit_etre_une_liste )
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ nil
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ )
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ (
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ (nullp e)
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ 0
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ )
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ (
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ t
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ (add 1 ( card ( cdr e )))
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ )
+\layout Quote
+
+
+\family typewriter 
+)
+\layout Quote
+
+
+\family typewriter 
+)
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\layout Quote
+
+
+\family typewriter 
+( de isthere ( e
+\protected_separator 
+ l )
+\protected_separator 
+ ; un élément est - il present ?
+\layout Quote
+
+
+\family typewriter 
+( cond
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ( ( not ( listp l)) ; verifions que l est une liste
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ( print '!!ERREUR_argument_2_doit_etre_une_liste )
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ nil
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ )
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ (
+\protected_separator 
+ (nullp l) nil )
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ (
+\protected_separator 
+ (equal (car l ) e)
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ e
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ )
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ( t
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ (isthere
+\protected_separator 
+ e ( cdr l))
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ )
+\layout Quote
+
+
+\family typewriter 
+)
+\layout Quote
+
+
+\family typewriter 
+)
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ 
+\layout Quote
+
+On peut faire :
+\layout Quote
+
+
+\family typewriter 
+1>
+\protected_separator 
+ ( load 'fensemble)
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+ chargement de fensemble ...
+\layout Quote
+
+
+\family typewriter 
+card
+\layout Quote
+
+
+\family typewriter 
+isthere
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+[toplevel]>
+\layout Quote
+
+
+\family typewriter 
+=t
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+
+\layout Quote
+
+
+\family typewriter 
+2>
+\layout Quote
+
+Le fichier fensemble est chargé comme si vous aviez tapé à la main ce qu'il
+ contient.
+\layout Description
+
+PETIT
+\protected_separator 
+DISFONCTIONNEMENT
+\protected_separator 
+: A l'invite 
+\begin_inset Quotes eld
+\end_inset 
+
+[toplevel]>
+\begin_inset Quotes erd
+\end_inset 
+
+, vous devez taper [ENTER] si vous voulez que s'affiche le résultat de l'évaluat
+ion de load.
+\layout Chapter
+
+Fonctions spéciales.
+\layout Section
+
+eval
+\begin_inset LatexCommand \index{eval}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(eval 
+\family sans 
+PHRASE
+\family typewriter 
+)
+\layout Description
+
+description
+\protected_separator 
+: retourne l'évaluation de la phrase.
+\layout Description
+
+exemple
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+1>
+\protected_separator 
+ ( eval '(add 1 2))
+\layout Quote
+
+
+\family typewriter 
+=3 
+\newline 
+2> ( eval 2) 
+\newline 
+=2
+\layout Quote
+
+Vous aussi, programmez (en Lisp) votre interpréteur Lisp !! :
+\layout Quote
+
+
+\family typewriter 
+1>
+\protected_separator 
+ ( while t (prin '?) (print (eval (read)))) 
+\newline 
+?( add 1 1) 
+\newline 
+2 
+\newline 
+?( repeat 10000 ( add 1 2)) 
+\newline 
+3 
+\newline 
+? 
+\layout Section
+\pagebreak_top 
+error
+\begin_inset LatexCommand \index{error}
+
+\end_inset 
+
+
+\layout Description
+
+synopsis
+\protected_separator 
+: 
+\family typewriter 
+(error)
+\layout Description
+
+description
+\protected_separator 
+: provoque une erreur d'évaluation et retourne 
+\begin_inset Quotes eld
+\end_inset 
+
+nil
+\begin_inset Quotes erd
+\end_inset 
+
+.
+ Cette fonction est utile pour provoquer des erreurs d'évaluation dans les
+ fonctions utilisateur, notamment dans la partie de contrôle des arguments.
+\layout Description
+
+exemple
+\protected_separator 
+:
+\layout Quote
+
+
+\family typewriter 
+6> ( de foo(x) (cond ( 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ (not (numbp x)) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ (print '!!ERREUR_doit_etre_un_nombre) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ (error) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ) 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ ; ensuite le traitement normal 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+ )
+\layout Quote
+
+
+\family typewriter 
+
+\protected_separator 
+) 
+\newline 
+=foo 
+\newline 
+15> ( foo 'f) 
+\newline 
+!!ERREUR_doit_etre_un_nombre 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+ dans l'appel de error 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+ dans l'appel de cond 
+\newline 
+
+\protected_separator 
+
+\protected_separator 
+ dans l'appel de foo 
+\newline 
+=nil
+\layout Quote
+
+On voit que (error) provoque une erreur d'évaluation ( voir 
+\begin_inset LatexCommand \ref{sec: erreur evaluation}
+
+\end_inset 
+
+ )qui stoppe l'évaluation de la fonction utilisateur.
+\layout Chapter
+\start_of_appendix 
+Les 
+\begin_inset LatexCommand \index{caractere}
+
+\end_inset 
+
+caractères acceptés.
+\begin_inset LatexCommand \label{sec: caractere}
+
+\end_inset 
+
+
+\layout Standard
+
+
+\family typewriter 
+! " # $ % & ' ( ) * + , - .
+ / 0 1 2 3 4 5 6 7 8 9 : ; < = > ? @ A B C D E F G H I J K L M N O P Q R
+ S T U V W X Y Z [ 
+\backslash 
+ ] ^ _ ` a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~ 
+\layout Chapter
+
+La grammaire
+\begin_inset LatexCommand \label{sec: grammaire}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{grammaire}
+
+\end_inset 
+
+ 
+\begin_inset LatexCommand \index{syntaxe}
+
+\end_inset 
+
+du Lisp.
+\layout Itemize
+
+phrase ::= <atome> | <'> phrase | <(> suite_phrase 
+\layout Itemize
+
+suite_phrase ::= <)> | phrase suite_phrase | <.> phrase <)> 
+\layout Chapter
+
+Messages d'erreur et warnings.
+\begin_inset LatexCommand \label{sec: erreurs}
+
+\end_inset 
+
+
+\begin_inset LatexCommand \index{messages}
+
+\end_inset 
+
+
+\layout Itemize
+
+
+\family typewriter 
+
+\protected_separator 
+!! ERREUR INTERNE plus de place libre dans l'espace des doublets 
+\newline 
+
+\protected_separator 
+!! ERREUR INTERNE, Tentative d'interroger un doublet inexistant 
+\family default 
+
+\newline 
+Problème technique.
+ Essayez de déclencher manuellement le garbage-collector
+\begin_inset LatexCommand \index{garbage-collector}
+
+\end_inset 
+
+ (tapez 
+\family typewriter 
+gc
+\family default 
+).
+ Contactez le revendeur du programme.
+\layout Itemize
+
+
+\family typewriter 
+
+\protected_separator 
+!! ERREUR INTERNE, plus de place disponible pour le symbole d 
+\newline 
+
+\protected_separator 
+!! ERREUR INTERNE tentative d'acces a un symbole inexistant
+\family default 
+ 
+\newline 
+Problème technique.
+ Essayez de déclencher manuellement le garbage-collector
+\begin_inset LatexCommand \index{garbage-collector}
+
+\end_inset 
+
+ (tapez 
+\family typewriter 
+gc
+\family default 
+).Contactez le revendeur du programme.
+ 
+\layout Itemize
+
+
+\family typewriter 
+
+\protected_separator 
+! SYNTAX ERROR at (l18,c24):
+\protected_separator 
+ Parenthese fermante attendue , found 'erreur'
+\family default 
+
+\newline 
+Erreur de syntaxe.
+ L'interpréteur indique ce qu'il attendait, et ce qu'il a trouvé.
+\layout Itemize
+
+
+\family typewriter 
+
+\protected_separator 
+WARNING: atome trop long (l 22, c 0) 
+\family default 
+
+\newline 
+L'interpréteur a rencontré un atome trop long ( voir 
+\begin_inset LatexCommand \ref{sec: atome}
+
+\end_inset 
+
+ ).
+\layout Itemize
+
+
+\family typewriter 
+
+\protected_separator 
+WARNING: caractere 'é' non valide (l20,c1) => Ignore
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\protected_separator 
+
+\family default 
+ 
+\newline 
+L'interpréteur a rencontré un caractère interdit ( cf 
+\begin_inset LatexCommand \ref{sec: caractere}
+
+\end_inset 
+
+ ) dans une phrase Lisp.
+ Ce caractère est simplement ignoré, et l'interpréteur agit comme si il
+ n'existait pas dans le fichier d'entrée.
+\layout Standard
+
+
+\begin_inset LatexCommand \printindex
+
+\end_inset 
+
+
+\the_end

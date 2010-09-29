@@ -1,0 +1,4 @@
+2 fonctions ajoutees :
+void env_garde(void);
+int env_env(int l, int *r );
+ Voir le .h pour le detail 
